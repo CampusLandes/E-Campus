@@ -1,0 +1,109 @@
+entity Event {
+    title String required,
+    desc String,
+    creationDate Instant required,
+    completionDate Instant,
+    status EventStatus required
+}
+
+entity EventType {
+    name String required
+}
+
+entity Localisation {
+    name String required,
+    localisation String required
+    gpsPosition String
+}
+
+entity Invitation {
+    message String,
+    status InvitationStatus required
+}
+
+entity Trip {
+    creationDate Instant required,
+    departureDate Instant
+}
+
+entity TripEvaluation {
+    note Integer required,
+    comment String,
+    type UserType required
+}
+
+entity Conversation {
+    name String required,
+    creationDate Instant required,
+    type ConversationType required,
+    policyType ConversationPolicyType required
+}
+
+entity Message {
+    message String required,
+    creationDate Instant required
+}
+
+entity Vehicle {
+    nbPlace Integer required,
+    trunkVolume Integer,
+    smoking Boolean
+}
+
+enum InvitationStatus {
+    WAIT,ACCEPT,REFUSE
+}
+
+enum EventStatus {
+    PRIVATE, PUBLIC
+}
+
+enum ConversationType {
+    GROUP,SINGLE
+}
+
+enum ConversationPolicyType {
+    PRIVATE, PUBLIC
+}
+
+enum UserType {
+    CONDUCTOR, PASSENGER
+}
+
+relationship OneToOne {
+    User{vehicle} to Vehicle
+}
+
+relationship OneToMany {
+    Event{type required} to EventType,
+    Event{localisation required} to Localisation,
+    Event{responsible required} to User,
+    Trip{startLocalisation} to Localisation,
+    Trip{endLocalisation} to Localisation,
+    Trip{driver} to User,
+    TripEvaluation{evaluated} to User,
+    TripEvaluation{assessor} to User,
+    Invitation{event} to Event,
+    Invitation{user} to User,
+    Conversation{creator} to User
+}
+
+relationship ManyToOne {
+    Conversation{message} to Message
+}
+
+relationship ManyToMany {
+    Event{participants} to User,
+    Trip{passenger} to User,
+    Conversation{participants} to User,
+    Message{sawPeople} to User
+}
+
+paginate * with infinite-scroll
+paginate * with pagination
+
+// Use Data Transfert Objects (DTO)
+dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl
