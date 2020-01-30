@@ -1,7 +1,7 @@
+// add audit
 entity Event {
     title String required,
     desc String,
-    creationDate Instant required,
     completionDate Instant,
     status EventStatus required
 }
@@ -16,36 +16,41 @@ entity Localisation {
     gpsPosition String
 }
 
+// add audit
 entity Invitation {
     message String,
     status InvitationStatus required
 }
 
+// add audit
 entity Trip {
     creationDate Instant required,
     departureDate Instant
 }
 
+// add audit
 entity TripEvaluation {
     note Integer required,
     comment String,
     type UserType required
 }
 
+// add audit
 entity Conversation {
     name String required,
-    creationDate Instant required,
     type ConversationType required,
     policyType ConversationPolicyType required
 }
 
+// add audit
 entity Message {
-    message String required,
-    creationDate Instant required
+    message String required
 }
 
 entity Vehicle {
+    type String required,
     nbPlace Integer required,
+    bagage String,
     trunkVolume Integer,
     smoking Boolean
 }
@@ -71,21 +76,21 @@ enum UserType {
 }
 
 relationship OneToOne {
-    User{vehicle} to Vehicle
+    User{vehicle(type)} to Vehicle
 }
 
 relationship OneToMany {
-    Event{type required} to EventType,
-    Event{localisation required} to Localisation,
-    Event{responsible required} to User,
-    Trip{startLocalisation} to Localisation,
-    Trip{endLocalisation} to Localisation,
-    Trip{driver} to User,
-    TripEvaluation{evaluated} to User,
-    TripEvaluation{assessor} to User,
-    Invitation{event} to Event,
-    Invitation{user} to User,
-    Conversation{creator} to User
+    Event{type(name) required} to EventType,
+    Event{localisation(name) required} to Localisation,
+    Event{responsible(login) required} to User,
+    Trip{startLocalisation(name)} to Localisation,
+    Trip{endLocalisation(name)} to Localisation,
+    Trip{driver(login)} to User,
+    TripEvaluation{evaluated(login)} to User,
+    TripEvaluation{assessor(login)} to User,
+    Invitation{event(title)} to Event,
+    Invitation{user(login)} to User,
+    Conversation{creator(login)} to User
 }
 
 relationship ManyToOne {
@@ -93,10 +98,10 @@ relationship ManyToOne {
 }
 
 relationship ManyToMany {
-    Event{participants} to User,
-    Trip{passenger} to User,
-    Conversation{participants} to User,
-    Message{sawPeople} to User
+    Event{participants(login)} to User,
+    Trip{passenger(login)} to User,
+    Conversation{participants(login)} to User,
+    Message{sawPeople(login)} to User
 }
 
 paginate * with infinite-scroll
