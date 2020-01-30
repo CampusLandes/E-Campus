@@ -50,6 +50,7 @@ entity Message {
 entity Vehicle {
     type String required,
     nbPlace Integer required,
+    bagage String,
     trunkVolume Integer,
     smoking Boolean
 }
