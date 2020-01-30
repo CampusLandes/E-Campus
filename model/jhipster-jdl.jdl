@@ -76,15 +76,15 @@ enum UserType {
 }
 
 relationship OneToOne {
-    User{vehicle(type)} to Vehicle
+    Vehicle{user(login)} to User
 }
 
 relationship OneToMany {
     Event{type(name) required} to EventType,
     Event{localisation(name) required} to Localisation,
     Event{responsible(login) required} to User,
-    Trip{startLocalisation(name)} to Localisation,
-    Trip{endLocalisation(name)} to Localisation,
+    Trip{startLocalisation(name)} to Localisation{startTrip},
+    Trip{endLocalisation(name)} to Localisation{endTrip},
     Trip{driver(login)} to User,
     TripEvaluation{evaluated(login)} to User,
     TripEvaluation{assessor(login)} to User,
