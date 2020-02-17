@@ -23,6 +23,12 @@ entity Invitation {
 }
 
 // add audit
+entity AddRequest {
+    message String,
+    status InvitationStatus required
+}
+
+// add audit
 entity Trip {
     creationDate Instant required,
     departureDate Instant
@@ -80,21 +86,24 @@ relationship OneToOne {
 }
 
 relationship OneToMany {
-    Event{type(name) required} to EventType,
-    Event{localisation(name) required} to Localisation,
-    Event{responsible(login) required} to User,
-    Trip{startLocalisation(name)} to Localisation{startTrip},
-    Trip{endLocalisation(name)} to Localisation{endTrip},
-    Trip{driver(login)} to User,
-    TripEvaluation{evaluated(login)} to User,
-    TripEvaluation{assessor(login)} to User,
-    Invitation{event(title)} to Event,
-    Invitation{user(login)} to User,
-    Conversation{creator(login)} to User
+    Conversation{message} to Message
 }
 
 relationship ManyToOne {
-    Conversation{message} to Message
+    Event{type(name) required} to EventType,
+    Event{localisation(name) required} to Localisation,
+    Trip{startLocalisation(name)} to Localisation,
+    Trip{endLocalisation(name)} to Localisation,
+    Invitation{event(title)} to Event,
+    Invitation{user(login)} to User,
+    AddRequest{event(title)} to Event,
+    AddRequest{user(login)} to User,
+    AddRequest{validator(login)} to User,
+    Trip{driver(login)} to User,
+    Event{responsible(login) required} to User,
+    TripEvaluation{evaluated(login)} to User,
+    TripEvaluation{assessor(login)} to User,
+    Conversation{creator(login)} to User
 }
 
 relationship ManyToMany {

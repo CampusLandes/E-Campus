@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+    <!--
+        Added the entity Message.
+    -->
+    <changeSet id="20200217103208-1" author="V0.1.0">
+        <createTable tableName="message">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="message" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="conversation_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20200217103208-1-relations" author="V0.1.0">
+
+        <createTable tableName="message_saw_people">
+            <column name="saw_people_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="message_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="message_id, saw_people_id" tableName="message_saw_people"/>
+
+    </changeSet>
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
+
+</databaseChangeLog>

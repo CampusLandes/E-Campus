@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <property name="now" value="now()" dbms="h2"/>
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+
+    <property name="floatType" value="float4" dbms="postgresql, h2"/>
+    <property name="floatType" value="float" dbms="mysql, oracle, mssql, mariadb"/>
+    <property name="clobType" value="longvarchar" dbms="h2"/>
+    <property name="clobType" value="clob" dbms="mysql, oracle, mssql, mariadb, postgresql"/>
+    <property name="uuidType" value="uuid" dbms="h2, postgresql"/>
+
+    <include file="20200217103200_added_entity_Event.xml" relativeToChangelogFile="true"/>
+    <include file="20200217103201_added_entity_EventType.xml" relativeToChangelogFile="true"/>
+    <include file="20200217103202_added_entity_Localisation.xml" relativeToChangelogFile="true"/>
+    <include file="20200217103203_added_entity_Invitation.xml" relativeToChangelogFile="true"/>
+    <include file="20200217103204_added_entity_AddRequest.xml" relativeToChangelogFile="true"/>
+    <include file="20200217103205_added_entity_Trip.xml" relativeToChangelogFile="true"/>
+    <include file="20200217103206_added_entity_TripEvaluation.xml" relativeToChangelogFile="true"/>
+    <include file="20200217103207_added_entity_Conversation.xml" relativeToChangelogFile="true"/>
+    <include file="20200217103208_added_entity_Message.xml" relativeToChangelogFile="true"/>
+    <include file="20200217103209_added_entity_Vehicle.xml" relativeToChangelogFile="true"/>
+    <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="20200217103200_added_entity_constraints_Event.xml" relativeToChangelogFile="true"/>
+    <include file="20200217103203_added_entity_constraints_Invitation.xml" relativeToChangelogFile="true"/>
+    <include file="20200217103204_added_entity_constraints_AddRequest.xml" relativeToChangelogFile="true"/>
+    <include file="20200217103205_added_entity_constraints_Trip.xml" relativeToChangelogFile="true"/>
+    <include file="20200217103206_added_entity_constraints_TripEvaluation.xml" relativeToChangelogFile="true"/>
+    <include file="20200217103207_added_entity_constraints_Conversation.xml" relativeToChangelogFile="true"/>
+    <include file="20200217103208_added_entity_constraints_Message.xml" relativeToChangelogFile="true"/>
+    <include file="20200217103209_added_entity_constraints_Vehicle.xml" relativeToChangelogFile="true"/>
+    <include file="add_audit.xml" relativeToChangelogFile="true"/>
+    <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+</databaseChangeLog>

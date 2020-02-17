@@ -1,0 +1,72 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-vehicle-heading" jhiTranslate="eCampusApp.vehicle.home.createOrEditLabel">Create or edit a Vehicle</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
+                        readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="eCampusApp.vehicle.type" for="field_type">Type</label>
+                    <input type="text" class="form-control" name="type" id="field_type"
+                           formControlName="type"/>
+                    <div *ngIf="editForm.get('type')!.invalid && (editForm.get('type')!.dirty || editForm.get('type')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('type')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="eCampusApp.vehicle.nbPlace" for="field_nbPlace">Nb Place</label>
+                    <input type="number" class="form-control" name="nbPlace" id="field_nbPlace"
+                           formControlName="nbPlace"/>
+                    <div *ngIf="editForm.get('nbPlace')!.invalid && (editForm.get('nbPlace')!.dirty || editForm.get('nbPlace')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('nbPlace')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.get('nbPlace')?.errors?.number" jhiTranslate="entity.validation.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="eCampusApp.vehicle.bagage" for="field_bagage">Bagage</label>
+                    <input type="text" class="form-control" name="bagage" id="field_bagage"
+                           formControlName="bagage"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="eCampusApp.vehicle.trunkVolume" for="field_trunkVolume">Trunk Volume</label>
+                    <input type="number" class="form-control" name="trunkVolume" id="field_trunkVolume"
+                           formControlName="trunkVolume"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="eCampusApp.vehicle.smoking" for="field_smoking">Smoking</label>
+                    <input type="checkbox" class="form-control" name="smoking" id="field_smoking"
+                           formControlName="smoking"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="eCampusApp.vehicle.user" for="field_user">User</label>
+                    <select class="form-control" id="field_user" name="user" formControlName="userId">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="userOption.id" *ngFor="let userOption of users; trackBy: trackById">{{userOption.login}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,79 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="eCampusApp.addRequest.home.title">Add Requests</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-add-request" [routerLink]="['/add-request/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span  jhiTranslate="eCampusApp.addRequest.home.createLabel">
+            Create a new Add Request
+            </span>
+        </button>
+    </h2>
+    <jhi-alert-error></jhi-alert-error>
+    <jhi-alert></jhi-alert>
+    <br/>
+    <div class="alert alert-warning" *ngIf="addRequests?.length === 0">
+        <span jhiTranslate="eCampusApp.addRequest.home.notFound">No addRequests found</span>
+    </div>
+    <div class="table-responsive" *ngIf="addRequests?.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
+            <th scope="col"  jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="message"><span jhiTranslate="eCampusApp.addRequest.message">Message</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="status"><span jhiTranslate="eCampusApp.addRequest.status">Status</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="eventTitle"><span jhiTranslate="eCampusApp.addRequest.event">Event</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="userLogin"><span jhiTranslate="eCampusApp.addRequest.user">User</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="validatorLogin"><span jhiTranslate="eCampusApp.addRequest.validator">Validator</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let addRequest of addRequests ;trackBy: trackId">
+                <td><a [routerLink]="['/add-request', addRequest.id, 'view' ]">{{addRequest.id}}</a></td>
+                <td>{{addRequest.message}}</td>
+                <td jhiTranslate="{{'eCampusApp.InvitationStatus.' + addRequest.status}}">{{addRequest.status}}</td>
+                <td>
+                    <div *ngIf="addRequest.eventId">
+                        <a [routerLink]="['/event', addRequest.eventId , 'view' ]" >{{addRequest.eventTitle}}</a>
+                    </div>
+                </td>
+                <td>
+                    {{addRequest.userLogin}}
+                </td>
+                <td>
+                    {{addRequest.validatorLogin}}
+                </td>
+                <td class="text-right">
+                    <div class="btn-group">
+                        <button type="submit"
+                                [routerLink]="['/add-request', addRequest.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/add-request', addRequest.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit" (click)="delete(addRequest)"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="addRequests?.length > 0">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="ngbPaginationPage" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage($event)"></ngb-pagination>
+        </div>
+    </div>
+</div>

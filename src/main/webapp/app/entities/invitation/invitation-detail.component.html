@@ -1,0 +1,41 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="invitation">
+            <h2><span jhiTranslate="eCampusApp.invitation.detail.title">Invitation</span> {{invitation.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="eCampusApp.invitation.message">Message</span></dt>
+                <dd>
+                    <span>{{invitation.message}}</span>
+                </dd>
+                <dt><span jhiTranslate="eCampusApp.invitation.status">Status</span></dt>
+                <dd>
+                    <span jhiTranslate="{{'eCampusApp.InvitationStatus.' + invitation.status}}">{{invitation.status}}</span>
+                </dd>
+                <dt><span jhiTranslate="eCampusApp.invitation.event">Event</span></dt>
+                <dd>
+                    <div *ngIf="invitation.eventId">
+                        <a [routerLink]="['/event', invitation.eventId, 'view']">{{invitation.eventTitle}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="eCampusApp.invitation.user">User</span></dt>
+                <dd>
+                    {{invitation.userLogin}}
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/invitation', invitation.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

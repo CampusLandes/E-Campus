@@ -1,0 +1,72 @@
+{
+    "name": "Event",
+    "fields": [
+        {
+            "fieldName": "title",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "desc",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "completionDate",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "EventStatus",
+            "fieldValues": "PRIVATE,PUBLIC",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "eventType",
+            "otherEntityRelationshipName": "event",
+            "relationshipValidateRules": "required",
+            "relationshipName": "type",
+            "otherEntityField": "name"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "localisation",
+            "otherEntityRelationshipName": "event",
+            "relationshipValidateRules": "required",
+            "relationshipName": "localisation",
+            "otherEntityField": "name"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "event",
+            "relationshipValidateRules": "required",
+            "relationshipName": "responsible",
+            "otherEntityField": "login"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "event",
+            "relationshipName": "participants",
+            "otherEntityField": "login",
+            "ownerSide": true
+        }
+    ],
+    "changelogDate": "20200217103200",
+    "entityTableName": "event",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

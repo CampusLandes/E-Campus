@@ -1,0 +1,43 @@
+{
+    "name": "Invitation",
+    "fields": [
+        {
+            "fieldName": "message",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "InvitationStatus",
+            "fieldValues": "WAIT,ACCEPT,REFUSE",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "event",
+            "otherEntityRelationshipName": "invitation",
+            "relationshipName": "event",
+            "otherEntityField": "title"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "invitation",
+            "relationshipName": "user",
+            "otherEntityField": "login"
+        }
+    ],
+    "changelogDate": "20200217103203",
+    "entityTableName": "invitation",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

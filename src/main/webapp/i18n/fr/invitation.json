@@ -1,0 +1,25 @@
+{
+  "eCampusApp": {
+    "invitation": {
+      "home": {
+        "title": "Invitations",
+        "createLabel": "Créer un nouveau Invitation",
+        "createOrEditLabel": "Créer ou éditer un Invitation",
+        "notFound": "Aucun Invitation trouvé"
+      },
+      "created": "Un nouveau Invitation a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Invitation avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Invitation avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Etes-vous certain de vouloir supprimer le Invitation {{ id }} ?"
+      },
+      "detail": {
+        "title": "Invitation"
+      },
+      "message": "Message",
+      "status": "Status",
+      "event": "Event",
+      "user": "User"
+    }
+  }
+}

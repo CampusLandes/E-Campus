@@ -1,0 +1,10 @@
+{
+  "eCampusApp": {
+    "InvitationStatus": {
+      "null": "",
+      "WAIT": "WAIT",
+      "ACCEPT": "ACCEPT",
+      "REFUSE": "REFUSE"
+    }
+  }
+}

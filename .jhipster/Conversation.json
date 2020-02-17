@@ -1,0 +1,61 @@
+{
+    "name": "Conversation",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "type",
+            "fieldType": "ConversationType",
+            "fieldValues": "GROUP,SINGLE",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "policyType",
+            "fieldType": "ConversationPolicyType",
+            "fieldValues": "PRIVATE,PUBLIC",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "message",
+            "otherEntityRelationshipName": "conversation",
+            "relationshipName": "message"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "conversation",
+            "relationshipName": "creator",
+            "otherEntityField": "login"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "conversation",
+            "relationshipName": "participants",
+            "otherEntityField": "login",
+            "ownerSide": true
+        }
+    ],
+    "changelogDate": "20200217103207",
+    "entityTableName": "conversation",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,74 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-conversation-heading" jhiTranslate="eCampusApp.conversation.home.createOrEditLabel">Create or edit a Conversation</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
+                        readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="eCampusApp.conversation.name" for="field_name">Name</label>
+                    <input type="text" class="form-control" name="name" id="field_name"
+                           formControlName="name"/>
+                    <div *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('name')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="eCampusApp.conversation.type" for="field_type">Type</label>
+                    <select class="form-control" name="type" formControlName="type" id="field_type">
+                        <option value="GROUP">{{'eCampusApp.ConversationType.GROUP' | translate}}</option>
+                        <option value="SINGLE">{{'eCampusApp.ConversationType.SINGLE' | translate}}</option>
+                    </select>
+                    <div *ngIf="editForm.get('type')!.invalid && (editForm.get('type')!.dirty || editForm.get('type')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('type')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="eCampusApp.conversation.policyType" for="field_policyType">Policy Type</label>
+                    <select class="form-control" name="policyType" formControlName="policyType" id="field_policyType">
+                        <option value="PRIVATE">{{'eCampusApp.ConversationPolicyType.PRIVATE' | translate}}</option>
+                        <option value="PUBLIC">{{'eCampusApp.ConversationPolicyType.PUBLIC' | translate}}</option>
+                    </select>
+                    <div *ngIf="editForm.get('policyType')!.invalid && (editForm.get('policyType')!.dirty || editForm.get('policyType')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('policyType')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="eCampusApp.conversation.creator" for="field_creator">Creator</label>
+                    <select class="form-control" id="field_creator" name="creator" formControlName="creatorId">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="userOption.id" *ngFor="let userOption of users; trackBy: trackById">{{userOption.login}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label jhiTranslate="eCampusApp.conversation.participants" for="field_participants">Participants</label>
+                    <select class="form-control" id="field_participants" multiple name="participants" formControlName="participants">
+                        <option [ngValue]="getSelected(editForm.get('participants')!.value, userOption)" *ngFor="let userOption of users; trackBy: trackById">{{userOption.login}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

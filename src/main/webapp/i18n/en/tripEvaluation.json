@@ -1,0 +1,26 @@
+{
+  "eCampusApp": {
+    "tripEvaluation": {
+      "home": {
+        "title": "Trip Evaluations",
+        "createLabel": "Create a new Trip Evaluation",
+        "createOrEditLabel": "Create or edit a Trip Evaluation",
+        "notFound": "No Trip Evaluations found"
+      },
+      "created": "A new Trip Evaluation is created with identifier {{ param }}",
+      "updated": "A Trip Evaluation is updated with identifier {{ param }}",
+      "deleted": "A Trip Evaluation is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Trip Evaluation {{ id }}?"
+      },
+      "detail": {
+        "title": "Trip Evaluation"
+      },
+      "note": "Note",
+      "comment": "Comment",
+      "type": "Type",
+      "evaluated": "Evaluated",
+      "assessor": "Assessor"
+    }
+  }
+}

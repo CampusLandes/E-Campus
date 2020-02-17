@@ -1,0 +1,22 @@
+{
+  "eCampusApp": {
+    "eventType": {
+      "home": {
+        "title": "Event Types",
+        "createLabel": "Create a new Event Type",
+        "createOrEditLabel": "Create or edit a Event Type",
+        "notFound": "No Event Types found"
+      },
+      "created": "A new Event Type is created with identifier {{ param }}",
+      "updated": "A Event Type is updated with identifier {{ param }}",
+      "deleted": "A Event Type is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Event Type {{ id }}?"
+      },
+      "detail": {
+        "title": "Event Type"
+      },
+      "name": "Name"
+    }
+  }
+}

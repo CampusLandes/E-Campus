@@ -1,0 +1,50 @@
+{
+    "name": "AddRequest",
+    "fields": [
+        {
+            "fieldName": "message",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "InvitationStatus",
+            "fieldValues": "WAIT,ACCEPT,REFUSE",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "event",
+            "otherEntityRelationshipName": "addRequest",
+            "relationshipName": "event",
+            "otherEntityField": "title"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "addRequest",
+            "relationshipName": "user",
+            "otherEntityField": "login"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "addRequest",
+            "relationshipName": "validator",
+            "otherEntityField": "login"
+        }
+    ],
+    "changelogDate": "20200217103204",
+    "entityTableName": "add_request",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}
