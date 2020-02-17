@@ -1,0 +1,53 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="trip">
+            <h2><span jhiTranslate="eCampusApp.trip.detail.title">Trip</span> {{trip.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="eCampusApp.trip.creationDate">Creation Date</span></dt>
+                <dd>
+                    <span>{{trip.creationDate}}</span>
+                </dd>
+                <dt><span jhiTranslate="eCampusApp.trip.departureDate">Departure Date</span></dt>
+                <dd>
+                    <span>{{trip.departureDate}}</span>
+                </dd>
+                <dt><span jhiTranslate="eCampusApp.trip.startLocalisation">Start Localisation</span></dt>
+                <dd>
+                    <div *ngIf="trip.startLocalisationId">
+                        <a [routerLink]="['/localisation', trip.startLocalisationId, 'view']">{{trip.startLocalisationName}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="eCampusApp.trip.endLocalisation">End Localisation</span></dt>
+                <dd>
+                    <div *ngIf="trip.endLocalisationId">
+                        <a [routerLink]="['/localisation', trip.endLocalisationId, 'view']">{{trip.endLocalisationName}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="eCampusApp.trip.driver">Driver</span></dt>
+                <dd>
+                    {{trip.driverLogin}}
+                </dd>
+                <dt><span jhiTranslate="eCampusApp.trip.passenger">Passenger</span></dt>
+                <dd>
+                    <span *ngFor="let passenger of trip.passengers; let last = last">
+                        {{passenger.login}}{{last ? '' : ', '}}
+                    </span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/trip', trip.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

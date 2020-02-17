@@ -1,0 +1,39 @@
+{
+    "name": "Message",
+    "fields": [
+        {
+            "fieldName": "message",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "message",
+            "relationshipName": "sawPeople",
+            "otherEntityField": "login",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "conversation",
+            "otherEntityRelationshipName": "message",
+            "relationshipName": "conversation",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200217103208",
+    "entityTableName": "message",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

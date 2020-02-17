@@ -1,0 +1,48 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-message-heading" jhiTranslate="eCampusApp.message.home.createOrEditLabel">Create or edit a Message</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
+                        readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="eCampusApp.message.message" for="field_message">Message</label>
+                    <input type="text" class="form-control" name="message" id="field_message"
+                           formControlName="message"/>
+                    <div *ngIf="editForm.get('message')!.invalid && (editForm.get('message')!.dirty || editForm.get('message')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('message')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label jhiTranslate="eCampusApp.message.sawPeople" for="field_sawPeople">Saw People</label>
+                    <select class="form-control" id="field_sawPeople" multiple name="sawPeople" formControlName="sawPeople">
+                        <option [ngValue]="getSelected(editForm.get('sawPeople')!.value, userOption)" *ngFor="let userOption of users; trackBy: trackById">{{userOption.login}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="eCampusApp.message.conversation" for="field_conversation">Conversation</label>
+                    <select class="form-control" id="field_conversation" name="conversation" formControlName="conversationId">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="conversationOption.id" *ngFor="let conversationOption of conversations; trackBy: trackById">{{conversationOption.id}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

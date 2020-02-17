@@ -7,6 +7,16 @@
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Entities",
+        "event": "Event",
+        "eventType": "Event Type",
+        "localisation": "Localisation",
+        "invitation": "Invitation",
+        "addRequest": "Add Request",
+        "trip": "Trip",
+        "tripEvaluation": "Trip Evaluation",
+        "conversation": "Conversation",
+        "message": "Message",
+        "vehicle": "Vehicle",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

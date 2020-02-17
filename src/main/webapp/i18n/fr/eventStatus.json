@@ -1,0 +1,9 @@
+{
+  "eCampusApp": {
+    "EventStatus": {
+      "null": "",
+      "PRIVATE": "PRIVATE",
+      "PUBLIC": "PUBLIC"
+    }
+  }
+}

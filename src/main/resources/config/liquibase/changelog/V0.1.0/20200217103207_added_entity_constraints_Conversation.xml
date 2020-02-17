@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity Conversation.
+    -->
+    <changeSet id="20200217103207-2" author="V0.1.0">
+
+        <addForeignKeyConstraint baseColumnNames="creator_id"
+                                 baseTableName="conversation"
+                                 constraintName="fk_conversation_creator_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="conversation_id"
+                                 baseTableName="conversation_participants"
+                                 constraintName="fk_conversation_participants_conversation_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="conversation"/>
+
+        <addForeignKeyConstraint baseColumnNames="participants_id"
+                                 baseTableName="conversation_participants"
+                                 constraintName="fk_conversation_participants_participants_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity AddRequest.
+    -->
+    <changeSet id="20200217103204-2" author="V0.1.0">
+
+        <addForeignKeyConstraint baseColumnNames="event_id"
+                                 baseTableName="add_request"
+                                 constraintName="fk_add_request_event_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="event"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="add_request"
+                                 constraintName="fk_add_request_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="validator_id"
+                                 baseTableName="add_request"
+                                 constraintName="fk_add_request_validator_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+    </changeSet>
+</databaseChangeLog>

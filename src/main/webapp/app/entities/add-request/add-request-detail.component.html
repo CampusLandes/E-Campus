@@ -1,0 +1,45 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="addRequest">
+            <h2><span jhiTranslate="eCampusApp.addRequest.detail.title">Add Request</span> {{addRequest.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="eCampusApp.addRequest.message">Message</span></dt>
+                <dd>
+                    <span>{{addRequest.message}}</span>
+                </dd>
+                <dt><span jhiTranslate="eCampusApp.addRequest.status">Status</span></dt>
+                <dd>
+                    <span jhiTranslate="{{'eCampusApp.InvitationStatus.' + addRequest.status}}">{{addRequest.status}}</span>
+                </dd>
+                <dt><span jhiTranslate="eCampusApp.addRequest.event">Event</span></dt>
+                <dd>
+                    <div *ngIf="addRequest.eventId">
+                        <a [routerLink]="['/event', addRequest.eventId, 'view']">{{addRequest.eventTitle}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="eCampusApp.addRequest.user">User</span></dt>
+                <dd>
+                    {{addRequest.userLogin}}
+                </dd>
+                <dt><span jhiTranslate="eCampusApp.addRequest.validator">Validator</span></dt>
+                <dd>
+                    {{addRequest.validatorLogin}}
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/add-request', addRequest.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

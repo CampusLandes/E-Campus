@@ -1,0 +1,26 @@
+{
+  "eCampusApp": {
+    "addRequest": {
+      "home": {
+        "title": "AddRequests",
+        "createLabel": "Créer un nouveau Add Request",
+        "createOrEditLabel": "Créer ou éditer un Add Request",
+        "notFound": "Aucun Add Request trouvé"
+      },
+      "created": "Un nouveau Add Request a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Add Request avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Add Request avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Etes-vous certain de vouloir supprimer le Add Request {{ id }} ?"
+      },
+      "detail": {
+        "title": "Add Request"
+      },
+      "message": "Message",
+      "status": "Status",
+      "event": "Event",
+      "user": "User",
+      "validator": "Validator"
+    }
+  }
+}

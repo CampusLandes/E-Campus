@@ -1,0 +1,9 @@
+{
+  "eCampusApp": {
+    "ConversationPolicyType": {
+      "null": "",
+      "PRIVATE": "PRIVATE",
+      "PUBLIC": "PUBLIC"
+    }
+  }
+}

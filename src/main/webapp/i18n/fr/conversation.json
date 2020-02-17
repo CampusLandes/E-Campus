@@ -1,0 +1,27 @@
+{
+  "eCampusApp": {
+    "conversation": {
+      "home": {
+        "title": "Conversations",
+        "createLabel": "Créer un nouveau Conversation",
+        "createOrEditLabel": "Créer ou éditer un Conversation",
+        "notFound": "Aucun Conversation trouvé"
+      },
+      "created": "Un nouveau Conversation a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Conversation avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Conversation avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Etes-vous certain de vouloir supprimer le Conversation {{ id }} ?"
+      },
+      "detail": {
+        "title": "Conversation"
+      },
+      "name": "Name",
+      "type": "Type",
+      "policyType": "Policy Type",
+      "message": "Message",
+      "creator": "Creator",
+      "participants": "Participants"
+    }
+  }
+}

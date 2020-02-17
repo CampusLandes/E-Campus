@@ -1,0 +1,9 @@
+{
+  "eCampusApp": {
+    "ConversationType": {
+      "null": "",
+      "GROUP": "GROUP",
+      "SINGLE": "SINGLE"
+    }
+  }
+}

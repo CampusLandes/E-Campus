@@ -1,0 +1,9 @@
+{
+  "eCampusApp": {
+    "UserType": {
+      "null": "",
+      "CONDUCTOR": "CONDUCTOR",
+      "PASSENGER": "PASSENGER"
+    }
+  }
+}

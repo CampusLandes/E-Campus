@@ -1,0 +1,50 @@
+{
+    "name": "TripEvaluation",
+    "fields": [
+        {
+            "fieldName": "note",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "comment",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "type",
+            "fieldType": "UserType",
+            "fieldValues": "CONDUCTOR,PASSENGER",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "tripEvaluation",
+            "relationshipName": "evaluated",
+            "otherEntityField": "login"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "tripEvaluation",
+            "relationshipName": "assessor",
+            "otherEntityField": "login"
+        }
+    ],
+    "changelogDate": "20200217103206",
+    "entityTableName": "trip_evaluation",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,27 @@
+{
+  "eCampusApp": {
+    "trip": {
+      "home": {
+        "title": "Trips",
+        "createLabel": "Créer un nouveau Trip",
+        "createOrEditLabel": "Créer ou éditer un Trip",
+        "notFound": "Aucun Trip trouvé"
+      },
+      "created": "Un nouveau Trip a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Trip avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Trip avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Etes-vous certain de vouloir supprimer le Trip {{ id }} ?"
+      },
+      "detail": {
+        "title": "Trip"
+      },
+      "creationDate": "Creation Date",
+      "departureDate": "Departure Date",
+      "startLocalisation": "Start Localisation",
+      "endLocalisation": "End Localisation",
+      "driver": "Driver",
+      "passenger": "Passenger"
+    }
+  }
+}
