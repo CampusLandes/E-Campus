@@ -91,6 +91,8 @@
     "ts-loader": "6.2.1",
     "tslint": "5.20.1",
     "typescript": "3.4.5",
+    "generator-jhipster-jgitver": "0.1.0",
+    "@openapitools/openapi-generator-cli": "0.0.14-4.0.2",
     "webpack": "4.41.2",
     "webpack-cli": "3.3.10",
     "webpack-dev-server": "3.9.0",
