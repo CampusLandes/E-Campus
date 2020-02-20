@@ -19,25 +19,17 @@
                         <a [routerLink]="['/event', addRequest.eventId, 'view']">{{addRequest.eventTitle}}</a>
                     </div>
                 </dd>
-                <dt><span jhiTranslate="eCampusApp.addRequest.user">User</span></dt>
-                <dd>
-                    {{addRequest.userLogin}}
-                </dd>
                 <dt><span jhiTranslate="eCampusApp.addRequest.validator">Validator</span></dt>
                 <dd>
                     {{addRequest.validatorLogin}}
                 </dd>
             </dl>
 
-            <button type="submit"
-                    (click)="previousState()"
-                    class="btn btn-info">
+            <button type="submit" (click)="previousState()" class="btn btn-info">
                 <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
             </button>
 
-            <button type="button"
-                    [routerLink]="['/add-request', addRequest.id, 'edit']"
-                    class="btn btn-primary">
+            <button type="button" [routerLink]="['/add-request', addRequest.id, 'edit']" class="btn btn-primary">
                 <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
             </button>
         </div>

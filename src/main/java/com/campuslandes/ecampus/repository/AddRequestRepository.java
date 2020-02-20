@@ -13,9 +13,6 @@ import java.util.List;
 @Repository
 public interface AddRequestRepository extends JpaRepository<AddRequest, Long> {
 
-    @Query("select addRequest from AddRequest addRequest where addRequest.user.login = ?#{principal.username}")
-    List<AddRequest> findByUserIsCurrentUser();
-
     @Query("select addRequest from AddRequest addRequest where addRequest.validator.login = ?#{principal.username}")
     List<AddRequest> findByValidatorIsCurrentUser();
 

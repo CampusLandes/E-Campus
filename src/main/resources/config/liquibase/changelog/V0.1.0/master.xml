@@ -32,6 +32,7 @@
     <include file="20200217103207_added_entity_constraints_Conversation.xml" relativeToChangelogFile="true"/>
     <include file="20200217103208_added_entity_constraints_Message.xml" relativeToChangelogFile="true"/>
     <include file="20200217103209_added_entity_constraints_Vehicle.xml" relativeToChangelogFile="true"/>
+    <include file="remove_add_request_field.xml" relativeToChangelogFile="true"/>
     <include file="add_audit.xml" relativeToChangelogFile="true"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

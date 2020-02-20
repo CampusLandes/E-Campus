@@ -13,14 +13,11 @@ public interface AddRequestMapper extends EntityMapper<AddRequestDTO, AddRequest
 
     @Mapping(source = "event.id", target = "eventId")
     @Mapping(source = "event.title", target = "eventTitle")
-    @Mapping(source = "user.id", target = "userId")
-    @Mapping(source = "user.login", target = "userLogin")
     @Mapping(source = "validator.id", target = "validatorId")
     @Mapping(source = "validator.login", target = "validatorLogin")
     AddRequestDTO toDto(AddRequest addRequest);
 
     @Mapping(source = "eventId", target = "event")
-    @Mapping(source = "userId", target = "user")
     @Mapping(source = "validatorId", target = "validator")
     AddRequest toEntity(AddRequestDTO addRequestDTO);
 

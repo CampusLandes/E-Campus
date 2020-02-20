@@ -21,10 +21,6 @@ public class AddRequestDTO implements Serializable {
 
     private String eventTitle;
 
-    private Long userId;
-
-    private String userLogin;
-
     private Long validatorId;
 
     private String validatorLogin;
@@ -67,22 +63,6 @@ public class AddRequestDTO implements Serializable {
 
     public void setEventTitle(String eventTitle) {
         this.eventTitle = eventTitle;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getUserLogin() {
-        return userLogin;
-    }
-
-    public void setUserLogin(String userLogin) {
-        this.userLogin = userLogin;
     }
 
     public Long getValidatorId() {
@@ -130,8 +110,6 @@ public class AddRequestDTO implements Serializable {
             ", status='" + getStatus() + "'" +
             ", eventId=" + getEventId() +
             ", eventTitle='" + getEventTitle() + "'" +
-            ", userId=" + getUserId() +
-            ", userLogin='" + getUserLogin() + "'" +
             ", validatorId=" + getValidatorId() +
             ", validatorLogin='" + getValidatorLogin() + "'" +
             "}";

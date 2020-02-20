@@ -6,8 +6,6 @@ export interface IAddRequest {
   status?: InvitationStatus;
   eventTitle?: string;
   eventId?: number;
-  userLogin?: string;
-  userId?: number;
   validatorLogin?: string;
   validatorId?: number;
 }
@@ -19,8 +17,6 @@ export class AddRequest implements IAddRequest {
     public status?: InvitationStatus,
     public eventTitle?: string,
     public eventId?: number,
-    public userLogin?: string,
-    public userId?: number,
     public validatorLogin?: string,
     public validatorId?: number
   ) {}

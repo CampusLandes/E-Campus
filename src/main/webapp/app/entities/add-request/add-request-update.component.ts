@@ -31,7 +31,6 @@ export class AddRequestUpdateComponent implements OnInit {
     message: [],
     status: [null, [Validators.required]],
     eventId: [],
-    userId: [],
     validatorId: []
   });
 
@@ -73,7 +72,6 @@ export class AddRequestUpdateComponent implements OnInit {
       message: addRequest.message,
       status: addRequest.status,
       eventId: addRequest.eventId,
-      userId: addRequest.userId,
       validatorId: addRequest.validatorId
     });
   }
@@ -99,7 +97,6 @@ export class AddRequestUpdateComponent implements OnInit {
       message: this.editForm.get(['message'])!.value,
       status: this.editForm.get(['status'])!.value,
       eventId: this.editForm.get(['eventId'])!.value,
-      userId: this.editForm.get(['userId'])!.value,
       validatorId: this.editForm.get(['validatorId'])!.value
     };
   }
