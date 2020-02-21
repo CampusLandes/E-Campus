@@ -36,10 +36,6 @@ public class AddRequest extends AbstractAuditingEntity implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("addRequests")
-    private User user;
-
-    @ManyToOne
-    @JsonIgnoreProperties("addRequests")
     private User validator;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -88,19 +84,6 @@ public class AddRequest extends AbstractAuditingEntity implements Serializable {
 
     public void setEvent(Event event) {
         this.event = event;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public AddRequest user(User user) {
-        this.user = user;
-        return this;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public User getValidator() {

@@ -1,20 +1,10 @@
 {
     "name": "Trip",
-    "fields": [
-        {
-            "fieldName": "creationDate",
-            "fieldType": "Instant",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "departureDate",
-            "fieldType": "Instant"
-        }
-    ],
-    "relationships": [
-        {
+    "fields": [{
+        "fieldName": "departureDate",
+        "fieldType": "Instant"
+    }],
+    "relationships": [{
             "relationshipType": "many-to-one",
             "otherEntityName": "localisation",
             "otherEntityRelationshipName": "trip",

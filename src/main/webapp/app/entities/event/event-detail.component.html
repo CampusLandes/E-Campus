@@ -21,6 +21,14 @@
                 <dd>
                     <span jhiTranslate="{{'eCampusApp.EventStatus.' + event.status}}">{{event.status}}</span>
                 </dd>
+                <dt><span jhiTranslate="userManagement.createdBy">Created By</span></dt>
+                <dd>{{event.createdBy}}</dd>
+                <dt><span jhiTranslate="userManagement.createdDate">Created Date</span></dt>
+                <dd>{{event.createdDate | date:'dd/MM/yy HH:mm' }}</dd>
+                <dt><span jhiTranslate="userManagement.lastModifiedBy">Last Modified By</span></dt>
+                <dd>{{event.lastModifiedBy}}</dd>
+                <dt><span jhiTranslate="userManagement.lastModifiedDate">Last Modified Date</span></dt>
+                <dd>{{event.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</dd>
                 <dt><span jhiTranslate="eCampusApp.event.type">Type</span></dt>
                 <dd>
                     <div *ngIf="event.typeId">
@@ -45,15 +53,11 @@
                 </dd>
             </dl>
 
-            <button type="submit"
-                    (click)="previousState()"
-                    class="btn btn-info">
+            <button type="submit" (click)="previousState()" class="btn btn-info">
                 <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
             </button>
 
-            <button type="button"
-                    [routerLink]="['/event', event.id, 'edit']"
-                    class="btn btn-primary">
+            <button type="button" [routerLink]="['/event', event.id, 'edit']" class="btn btn-primary">
                 <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
             </button>
         </div>

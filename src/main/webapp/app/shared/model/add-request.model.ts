@@ -6,8 +6,10 @@ export interface IAddRequest {
   status?: InvitationStatus;
   eventTitle?: string;
   eventId?: number;
-  userLogin?: string;
-  userId?: number;
+  createdBy?: string;
+  createdDate?: Date;
+  lastModifiedBy?: string;
+  lastModifiedDate?: Date;
   validatorLogin?: string;
   validatorId?: number;
 }
@@ -19,8 +21,10 @@ export class AddRequest implements IAddRequest {
     public status?: InvitationStatus,
     public eventTitle?: string,
     public eventId?: number,
-    public userLogin?: string,
-    public userId?: number,
+    public createdBy?: string,
+    public createdDate?: Date,
+    public lastModifiedBy?: string,
+    public lastModifiedDate?: Date,
     public validatorLogin?: string,
     public validatorId?: number
   ) {}

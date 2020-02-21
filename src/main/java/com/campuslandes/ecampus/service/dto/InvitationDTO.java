@@ -1,6 +1,8 @@
 package com.campuslandes.ecampus.service.dto;
+
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Objects;
 import com.campuslandes.ecampus.domain.enumeration.InvitationStatus;
 
@@ -16,7 +18,6 @@ public class InvitationDTO implements Serializable {
     @NotNull
     private InvitationStatus status;
 
-
     private Long eventId;
 
     private String eventTitle;
@@ -25,8 +26,48 @@ public class InvitationDTO implements Serializable {
 
     private String userLogin;
 
+    private String createdBy;
+
+    private Instant createdDate;
+
+    private String lastModifiedBy;
+
+    private Instant lastModifiedDate;
+
     public Long getId() {
         return id;
+    }
+
+    public Instant getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(Instant lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public String getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(String lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
+
+    public Instant getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Instant createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 
     public void setId(Long id) {
@@ -112,6 +153,10 @@ public class InvitationDTO implements Serializable {
             ", eventTitle='" + getEventTitle() + "'" +
             ", userId=" + getUserId() +
             ", userLogin='" + getUserLogin() + "'" +
+            ", createdBy='" + getCreatedBy() + "'" +
+            ", createdDate='" + getCreatedDate() + "'" +
+            ", lastModifiedBy='" + getLastModifiedBy() + "'" +
+            ", lastModifiedDate='" + getLastModifiedDate() + "'" +
             "}";
     }
 }

@@ -19,7 +19,6 @@
       "message": "Message",
       "status": "Status",
       "event": "Event",
-      "user": "User",
       "validator": "Validator"
     }
   }

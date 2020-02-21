@@ -14,6 +14,10 @@ export interface IEvent {
   localisationId?: number;
   responsibleLogin?: string;
   responsibleId?: number;
+  createdBy?: string;
+  createdDate?: Date;
+  lastModifiedBy?: string;
+  lastModifiedDate?: Date;
   participants?: IUser[];
 }
 
@@ -30,6 +34,10 @@ export class Event implements IEvent {
     public localisationId?: number,
     public responsibleLogin?: string,
     public responsibleId?: number,
+    public createdBy?: string,
+    public createdDate?: Date,
+    public lastModifiedBy?: string,
+    public lastModifiedDate?: Date,
     public participants?: IUser[]
   ) {}
 }

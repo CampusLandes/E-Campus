@@ -1,6 +1,8 @@
 package com.campuslandes.ecampus.service.dto;
+
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Objects;
 import com.campuslandes.ecampus.domain.enumeration.InvitationStatus;
 
@@ -16,21 +18,56 @@ public class AddRequestDTO implements Serializable {
     @NotNull
     private InvitationStatus status;
 
-
     private Long eventId;
 
     private String eventTitle;
-
-    private Long userId;
-
-    private String userLogin;
 
     private Long validatorId;
 
     private String validatorLogin;
 
+    private String createdBy;
+
+    private Instant createdDate;
+
+    private String lastModifiedBy;
+
+    private Instant lastModifiedDate;
+
     public Long getId() {
         return id;
+    }
+
+    public Instant getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(Instant lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public String getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(String lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
+
+    public Instant getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Instant createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 
     public void setId(Long id) {
@@ -67,22 +104,6 @@ public class AddRequestDTO implements Serializable {
 
     public void setEventTitle(String eventTitle) {
         this.eventTitle = eventTitle;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getUserLogin() {
-        return userLogin;
-    }
-
-    public void setUserLogin(String userLogin) {
-        this.userLogin = userLogin;
     }
 
     public Long getValidatorId() {
@@ -130,10 +151,12 @@ public class AddRequestDTO implements Serializable {
             ", status='" + getStatus() + "'" +
             ", eventId=" + getEventId() +
             ", eventTitle='" + getEventTitle() + "'" +
-            ", userId=" + getUserId() +
-            ", userLogin='" + getUserLogin() + "'" +
             ", validatorId=" + getValidatorId() +
             ", validatorLogin='" + getValidatorLogin() + "'" +
+            ", createdBy='" + getCreatedBy() + "'" +
+            ", createdDate='" + getCreatedDate() + "'" +
+            ", lastModifiedBy='" + getLastModifiedBy() + "'" +
+            ", lastModifiedDate='" + getLastModifiedDate() + "'" +
             "}";
     }
 }

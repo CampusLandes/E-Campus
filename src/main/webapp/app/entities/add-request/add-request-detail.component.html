@@ -19,25 +19,25 @@
                         <a [routerLink]="['/event', addRequest.eventId, 'view']">{{addRequest.eventTitle}}</a>
                     </div>
                 </dd>
-                <dt><span jhiTranslate="eCampusApp.addRequest.user">User</span></dt>
-                <dd>
-                    {{addRequest.userLogin}}
-                </dd>
                 <dt><span jhiTranslate="eCampusApp.addRequest.validator">Validator</span></dt>
                 <dd>
                     {{addRequest.validatorLogin}}
                 </dd>
+                <dt><span jhiTranslate="userManagement.createdBy">Created By</span></dt>
+                <dd>{{addRequest.createdBy}}</dd>
+                <dt><span jhiTranslate="userManagement.createdDate">Created Date</span></dt>
+                <dd>{{addRequest.createdDate | date:'dd/MM/yy HH:mm' }}</dd>
+                <dt><span jhiTranslate="userManagement.lastModifiedBy">Last Modified By</span></dt>
+                <dd>{{addRequest.lastModifiedBy}}</dd>
+                <dt><span jhiTranslate="userManagement.lastModifiedDate">Last Modified Date</span></dt>
+                <dd>{{addRequest.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</dd>
             </dl>
 
-            <button type="submit"
-                    (click)="previousState()"
-                    class="btn btn-info">
+            <button type="submit" (click)="previousState()" class="btn btn-info">
                 <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
             </button>
 
-            <button type="button"
-                    [routerLink]="['/add-request', addRequest.id, 'edit']"
-                    class="btn btn-primary">
+            <button type="button" [routerLink]="['/add-request', addRequest.id, 'edit']" class="btn btn-primary">
                 <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
             </button>
         </div>

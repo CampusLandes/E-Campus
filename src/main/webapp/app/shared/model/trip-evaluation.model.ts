@@ -7,6 +7,10 @@ export interface ITripEvaluation {
   type?: UserType;
   evaluatedLogin?: string;
   evaluatedId?: number;
+  createdBy?: string;
+  createdDate?: Date;
+  lastModifiedBy?: string;
+  lastModifiedDate?: Date;
   assessorLogin?: string;
   assessorId?: number;
 }
@@ -19,6 +23,10 @@ export class TripEvaluation implements ITripEvaluation {
     public type?: UserType,
     public evaluatedLogin?: string,
     public evaluatedId?: number,
+    public createdBy?: string,
+    public createdDate?: Date,
+    public lastModifiedBy?: string,
+    public lastModifiedDate?: Date,
     public assessorLogin?: string,
     public assessorId?: number
   ) {}

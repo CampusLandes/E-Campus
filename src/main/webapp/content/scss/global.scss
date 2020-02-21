@@ -27,6 +27,7 @@ a:hover {
 /* ==========================================================================
 Browser Upgrade Prompt
 ========================================================================== */
+
 .browserupgrade {
   margin: 0.2em 0;
   background: #ccc;
@@ -85,7 +86,15 @@ Generic styles
 /* ==========================================================================
 Custom alerts for notification
 ========================================================================== */
+
 .alerts {
+  z-index: 100000;
+  display: block;
+  position: fixed;
+  top: 0px;
+  left: 10vw;
+  right: 10vw;
+  margin: 0% auto;
   .alert {
     text-overflow: ellipsis;
     pre {
@@ -127,6 +136,7 @@ Custom alerts for notification
 /* ==========================================================================
 entity detail page css
 ========================================================================== */
+
 .row.jh-entity-details > {
   dd {
     margin-bottom: 15px;
@@ -149,6 +159,7 @@ entity detail page css
 /* ==========================================================================
 ui bootstrap tweaks
 ========================================================================== */
+
 .nav,
 .pagination,
 .carousel,
