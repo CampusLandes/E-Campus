@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+    <!--
+        Added the entity AddRequest.
+    -->
+    <changeSet id="add_unique_constraint" author="V0.1.0">
+        <addUniqueConstraint
+            columnNames="name"
+            constraintName="unique_event_type_name"
+            deferrable="true"
+            disabled="true"
+            initiallyDeferred="true"
+            tableName="event_type"
+            validate="true"/>
+
+        <addUniqueConstraint
+            columnNames="localisation"
+            constraintName="unique_localisation_localisation"
+            deferrable="true"
+            disabled="true"
+            initiallyDeferred="true"
+            tableName="localisation"
+            validate="true"/>
+
+        <addUniqueConstraint
+            columnNames="name"
+            constraintName="unique_localisation_name"
+            deferrable="true"
+            disabled="true"
+            initiallyDeferred="true"
+            tableName="localisation"
+            validate="true"/>
+    </changeSet>
+</databaseChangeLog>

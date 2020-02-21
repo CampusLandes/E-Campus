@@ -11,6 +11,10 @@ export interface IConversation {
   messages?: IMessage[];
   creatorLogin?: string;
   creatorId?: number;
+  createdBy?: string;
+  createdDate?: Date;
+  lastModifiedBy?: string;
+  lastModifiedDate?: Date;
   participants?: IUser[];
 }
 
@@ -23,6 +27,10 @@ export class Conversation implements IConversation {
     public messages?: IMessage[],
     public creatorLogin?: string,
     public creatorId?: number,
+    public createdBy?: string,
+    public createdDate?: Date,
+    public lastModifiedBy?: string,
+    public lastModifiedDate?: Date,
     public participants?: IUser[]
   ) {}
 }

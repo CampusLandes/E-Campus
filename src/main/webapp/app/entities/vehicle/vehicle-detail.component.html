@@ -3,7 +3,6 @@
         <div *ngIf="vehicle">
             <h2><span jhiTranslate="eCampusApp.vehicle.detail.title">Vehicle</span> {{vehicle.id}}</h2>
             <hr>
-            <jhi-alert-error></jhi-alert-error>
             <dl class="row-md jh-entity-details">
                 <dt><span jhiTranslate="eCampusApp.vehicle.type">Type</span></dt>
                 <dd>
@@ -31,15 +30,11 @@
                 </dd>
             </dl>
 
-            <button type="submit"
-                    (click)="previousState()"
-                    class="btn btn-info">
+            <button type="submit" (click)="previousState()" class="btn btn-info">
                 <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
             </button>
 
-            <button type="button"
-                    [routerLink]="['/vehicle', vehicle.id, 'edit']"
-                    class="btn btn-primary">
+            <button type="button" [routerLink]="['/vehicle', vehicle.id, 'edit']" class="btn btn-primary">
                 <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
             </button>
         </div>

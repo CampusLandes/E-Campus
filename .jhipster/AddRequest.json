@@ -1,7 +1,6 @@
 {
     "name": "AddRequest",
-    "fields": [
-        {
+    "fields": [{
             "fieldName": "message",
             "fieldType": "String"
         },
@@ -14,20 +13,12 @@
             ]
         }
     ],
-    "relationships": [
-        {
+    "relationships": [{
             "relationshipType": "many-to-one",
             "otherEntityName": "event",
             "otherEntityRelationshipName": "addRequest",
             "relationshipName": "event",
             "otherEntityField": "title"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "user",
-            "otherEntityRelationshipName": "addRequest",
-            "relationshipName": "user",
-            "otherEntityField": "login"
         },
         {
             "relationshipType": "many-to-one",

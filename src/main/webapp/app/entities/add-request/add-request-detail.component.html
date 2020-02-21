@@ -23,6 +23,14 @@
                 <dd>
                     {{addRequest.validatorLogin}}
                 </dd>
+                <dt><span jhiTranslate="userManagement.createdBy">Created By</span></dt>
+                <dd>{{addRequest.createdBy}}</dd>
+                <dt><span jhiTranslate="userManagement.createdDate">Created Date</span></dt>
+                <dd>{{addRequest.createdDate | date:'dd/MM/yy HH:mm' }}</dd>
+                <dt><span jhiTranslate="userManagement.lastModifiedBy">Last Modified By</span></dt>
+                <dd>{{addRequest.lastModifiedBy}}</dd>
+                <dt><span jhiTranslate="userManagement.lastModifiedDate">Last Modified Date</span></dt>
+                <dd>{{addRequest.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</dd>
             </dl>
 
             <button type="submit" (click)="previousState()" class="btn btn-info">

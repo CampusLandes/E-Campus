@@ -30,7 +30,6 @@ export class TripUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    creationDate: [null, [Validators.required]],
     departureDate: [],
     startLocalisationId: [],
     endLocalisationId: [],
@@ -73,7 +72,6 @@ export class TripUpdateComponent implements OnInit {
   updateForm(trip: ITrip): void {
     this.editForm.patchValue({
       id: trip.id,
-      creationDate: trip.creationDate != null ? trip.creationDate.format(DATE_TIME_FORMAT) : null,
       departureDate: trip.departureDate != null ? trip.departureDate.format(DATE_TIME_FORMAT) : null,
       startLocalisationId: trip.startLocalisationId,
       endLocalisationId: trip.endLocalisationId,
@@ -100,10 +98,6 @@ export class TripUpdateComponent implements OnInit {
     return {
       ...new Trip(),
       id: this.editForm.get(['id'])!.value,
-      creationDate:
-        this.editForm.get(['creationDate'])!.value != null
-          ? moment(this.editForm.get(['creationDate'])!.value, DATE_TIME_FORMAT)
-          : undefined,
       departureDate:
         this.editForm.get(['departureDate'])!.value != null
           ? moment(this.editForm.get(['departureDate'])!.value, DATE_TIME_FORMAT)

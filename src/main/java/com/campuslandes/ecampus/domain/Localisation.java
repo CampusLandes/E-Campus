@@ -20,11 +20,11 @@ public class Localisation implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     @NotNull
-    @Column(name = "localisation", nullable = false)
+    @Column(name = "localisation", nullable = false, unique = true)
     private String localisation;
 
     @Column(name = "gps_position")

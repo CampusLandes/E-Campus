@@ -23,10 +23,6 @@ public class Trip extends AbstractAuditingEntity implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @NotNull
-    @Column(name = "creation_date", nullable = false)
-    private Instant creationDate;
-
     @Column(name = "departure_date")
     private Instant departureDate;
 
@@ -55,19 +51,6 @@ public class Trip extends AbstractAuditingEntity implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Instant getCreationDate() {
-        return creationDate;
-    }
-
-    public Trip creationDate(Instant creationDate) {
-        this.creationDate = creationDate;
-        return this;
-    }
-
-    public void setCreationDate(Instant creationDate) {
-        this.creationDate = creationDate;
     }
 
     public Instant getDepartureDate() {
@@ -166,7 +149,6 @@ public class Trip extends AbstractAuditingEntity implements Serializable {
     public String toString() {
         return "Trip{" +
             "id=" + getId() +
-            ", creationDate='" + getCreationDate() + "'" +
             ", departureDate='" + getDepartureDate() + "'" +
             "}";
     }

@@ -52,7 +52,6 @@ export class TripService {
 
   protected convertDateFromClient(trip: ITrip): ITrip {
     const copy: ITrip = Object.assign({}, trip, {
-      creationDate: trip.creationDate && trip.creationDate.isValid() ? trip.creationDate.toJSON() : undefined,
       departureDate: trip.departureDate && trip.departureDate.isValid() ? trip.departureDate.toJSON() : undefined
     });
     return copy;
@@ -60,7 +59,6 @@ export class TripService {
 
   protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
     if (res.body) {
-      res.body.creationDate = res.body.creationDate ? moment(res.body.creationDate) : undefined;
       res.body.departureDate = res.body.departureDate ? moment(res.body.departureDate) : undefined;
     }
     return res;
@@ -69,7 +67,6 @@ export class TripService {
   protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
     if (res.body) {
       res.body.forEach((trip: ITrip) => {
-        trip.creationDate = trip.creationDate ? moment(trip.creationDate) : undefined;
         trip.departureDate = trip.departureDate ? moment(trip.departureDate) : undefined;
       });
     }

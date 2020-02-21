@@ -15,7 +15,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -42,9 +41,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @SpringBootTest(classes = ECampusApp.class)
 public class TripResourceIT {
-
-    private static final Instant DEFAULT_CREATION_DATE = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_CREATION_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     private static final Instant DEFAULT_DEPARTURE_DATE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_DEPARTURE_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
@@ -103,7 +99,6 @@ public class TripResourceIT {
      */
     public static Trip createEntity(EntityManager em) {
         Trip trip = new Trip()
-            .creationDate(DEFAULT_CREATION_DATE)
             .departureDate(DEFAULT_DEPARTURE_DATE);
         return trip;
     }
@@ -115,7 +110,6 @@ public class TripResourceIT {
      */
     public static Trip createUpdatedEntity(EntityManager em) {
         Trip trip = new Trip()
-            .creationDate(UPDATED_CREATION_DATE)
             .departureDate(UPDATED_DEPARTURE_DATE);
         return trip;
     }
@@ -141,7 +135,6 @@ public class TripResourceIT {
         List<Trip> tripList = tripRepository.findAll();
         assertThat(tripList).hasSize(databaseSizeBeforeCreate + 1);
         Trip testTrip = tripList.get(tripList.size() - 1);
-        assertThat(testTrip.getCreationDate()).isEqualTo(DEFAULT_CREATION_DATE);
         assertThat(testTrip.getDepartureDate()).isEqualTo(DEFAULT_DEPARTURE_DATE);
     }
 
@@ -168,25 +161,6 @@ public class TripResourceIT {
 
     @Test
     @Transactional
-    public void checkCreationDateIsRequired() throws Exception {
-        int databaseSizeBeforeTest = tripRepository.findAll().size();
-        // set the field null
-        trip.setCreationDate(null);
-
-        // Create the Trip, which fails.
-        TripDTO tripDTO = tripMapper.toDto(trip);
-
-        restTripMockMvc.perform(post("/api/trips")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(tripDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<Trip> tripList = tripRepository.findAll();
-        assertThat(tripList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void getAllTrips() throws Exception {
         // Initialize the database
         tripRepository.saveAndFlush(trip);
@@ -196,10 +170,9 @@ public class TripResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(trip.getId().intValue())))
-            .andExpect(jsonPath("$.[*].creationDate").value(hasItem(DEFAULT_CREATION_DATE.toString())))
             .andExpect(jsonPath("$.[*].departureDate").value(hasItem(DEFAULT_DEPARTURE_DATE.toString())));
     }
-    
+
     @SuppressWarnings({"unchecked"})
     public void getAllTripsWithEagerRelationshipsIsEnabled() throws Exception {
         TripResource tripResource = new TripResource(tripServiceMock);
@@ -244,7 +217,6 @@ public class TripResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(trip.getId().intValue()))
-            .andExpect(jsonPath("$.creationDate").value(DEFAULT_CREATION_DATE.toString()))
             .andExpect(jsonPath("$.departureDate").value(DEFAULT_DEPARTURE_DATE.toString()));
     }
 
@@ -269,7 +241,6 @@ public class TripResourceIT {
         // Disconnect from session so that the updates on updatedTrip are not directly saved in db
         em.detach(updatedTrip);
         updatedTrip
-            .creationDate(UPDATED_CREATION_DATE)
             .departureDate(UPDATED_DEPARTURE_DATE);
         TripDTO tripDTO = tripMapper.toDto(updatedTrip);
 
@@ -282,7 +253,6 @@ public class TripResourceIT {
         List<Trip> tripList = tripRepository.findAll();
         assertThat(tripList).hasSize(databaseSizeBeforeUpdate);
         Trip testTrip = tripList.get(tripList.size() - 1);
-        assertThat(testTrip.getCreationDate()).isEqualTo(UPDATED_CREATION_DATE);
         assertThat(testTrip.getDepartureDate()).isEqualTo(UPDATED_DEPARTURE_DATE);
     }
 
