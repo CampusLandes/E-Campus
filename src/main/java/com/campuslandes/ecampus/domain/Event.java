@@ -40,6 +40,9 @@ public class Event extends AbstractAuditingEntity implements Serializable {
     @Column(name = "status", nullable = false)
     private EventStatus status;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("events")
@@ -120,6 +123,19 @@ public class Event extends AbstractAuditingEntity implements Serializable {
 
     public void setStatus(EventStatus status) {
         this.status = status;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public Event imageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+        return this;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public EventType getType() {
@@ -209,6 +225,7 @@ public class Event extends AbstractAuditingEntity implements Serializable {
             ", desc='" + getDesc() + "'" +
             ", completionDate='" + getCompletionDate() + "'" +
             ", status='" + getStatus() + "'" +
+            ", imageUrl='" + getImageUrl() + "'" +
             "}";
     }
 }

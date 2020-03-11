@@ -1,5 +1,4 @@
 package com.campuslandes.ecampus.service.dto;
-
 import java.time.Instant;
 import javax.validation.constraints.*;
 import java.io.Serializable;
@@ -24,6 +23,9 @@ public class EventDTO implements Serializable {
 
     @NotNull
     private EventStatus status;
+
+    private String imageUrl;
+
 
     private Long typeId;
 
@@ -119,6 +121,14 @@ public class EventDTO implements Serializable {
         this.status = status;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     public Long getTypeId() {
         return typeId;
     }
@@ -204,6 +214,7 @@ public class EventDTO implements Serializable {
             ", desc='" + getDesc() + "'" +
             ", completionDate='" + getCompletionDate() + "'" +
             ", status='" + getStatus() + "'" +
+            ", imageUrl='" + getImageUrl() + "'" +
             ", typeId=" + getTypeId() +
             ", typeName='" + getTypeName() + "'" +
             ", localisationId=" + getLocalisationId() +

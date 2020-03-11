@@ -59,6 +59,9 @@ public class EventResourceIT {
     private static final EventStatus DEFAULT_STATUS = EventStatus.PRIVATE;
     private static final EventStatus UPDATED_STATUS = EventStatus.PUBLIC;
 
+    private static final String DEFAULT_IMAGE_URL = "AAAAAAAAAA";
+    private static final String UPDATED_IMAGE_URL = "BBBBBBBBBB";
+
     @Autowired
     private EventRepository eventRepository;
 
@@ -116,7 +119,8 @@ public class EventResourceIT {
             .title(DEFAULT_TITLE)
             .desc(DEFAULT_DESC)
             .completionDate(DEFAULT_COMPLETION_DATE)
-            .status(DEFAULT_STATUS);
+            .status(DEFAULT_STATUS)
+            .imageUrl(DEFAULT_IMAGE_URL);
         // Add required entity
         EventType eventType;
         if (TestUtil.findAll(em, EventType.class).isEmpty()) {
@@ -155,7 +159,8 @@ public class EventResourceIT {
             .title(UPDATED_TITLE)
             .desc(UPDATED_DESC)
             .completionDate(UPDATED_COMPLETION_DATE)
-            .status(UPDATED_STATUS);
+            .status(UPDATED_STATUS)
+            .imageUrl(UPDATED_IMAGE_URL);
         // Add required entity
         EventType eventType;
         if (TestUtil.findAll(em, EventType.class).isEmpty()) {
@@ -209,6 +214,7 @@ public class EventResourceIT {
         assertThat(testEvent.getDesc()).isEqualTo(DEFAULT_DESC);
         assertThat(testEvent.getCompletionDate()).isEqualTo(DEFAULT_COMPLETION_DATE);
         assertThat(testEvent.getStatus()).isEqualTo(DEFAULT_STATUS);
+        assertThat(testEvent.getImageUrl()).isEqualTo(DEFAULT_IMAGE_URL);
     }
 
     @Test
@@ -284,7 +290,8 @@ public class EventResourceIT {
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].desc").value(hasItem(DEFAULT_DESC)))
             .andExpect(jsonPath("$.[*].completionDate").value(hasItem(DEFAULT_COMPLETION_DATE.toString())))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].imageUrl").value(hasItem(DEFAULT_IMAGE_URL)));
     }
     
     @SuppressWarnings({"unchecked"})
@@ -334,7 +341,8 @@ public class EventResourceIT {
             .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
             .andExpect(jsonPath("$.desc").value(DEFAULT_DESC))
             .andExpect(jsonPath("$.completionDate").value(DEFAULT_COMPLETION_DATE.toString()))
-            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()));
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()))
+            .andExpect(jsonPath("$.imageUrl").value(DEFAULT_IMAGE_URL));
     }
 
     @Test
@@ -361,7 +369,8 @@ public class EventResourceIT {
             .title(UPDATED_TITLE)
             .desc(UPDATED_DESC)
             .completionDate(UPDATED_COMPLETION_DATE)
-            .status(UPDATED_STATUS);
+            .status(UPDATED_STATUS)
+            .imageUrl(UPDATED_IMAGE_URL);
         EventDTO eventDTO = eventMapper.toDto(updatedEvent);
 
         restEventMockMvc.perform(put("/api/events")
@@ -377,6 +386,7 @@ public class EventResourceIT {
         assertThat(testEvent.getDesc()).isEqualTo(UPDATED_DESC);
         assertThat(testEvent.getCompletionDate()).isEqualTo(UPDATED_COMPLETION_DATE);
         assertThat(testEvent.getStatus()).isEqualTo(UPDATED_STATUS);
+        assertThat(testEvent.getImageUrl()).isEqualTo(UPDATED_IMAGE_URL);
     }
 
     @Test

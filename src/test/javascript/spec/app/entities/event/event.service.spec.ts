@@ -25,7 +25,7 @@ describe('Service Tests', () => {
       httpMock = injector.get(HttpTestingController);
       currentDate = moment();
 
-      elemDefault = new Event(0, 'AAAAAAA', 'AAAAAAA', currentDate, EventStatus.PRIVATE);
+      elemDefault = new Event(0, 'AAAAAAA', 'AAAAAAA', currentDate, EventStatus.PRIVATE, 'AAAAAAA');
     });
 
     describe('Service methods', () => {
@@ -75,7 +75,8 @@ describe('Service Tests', () => {
             title: 'BBBBBB',
             desc: 'BBBBBB',
             completionDate: currentDate.format(DATE_TIME_FORMAT),
-            status: 'BBBBBB'
+            status: 'BBBBBB',
+            imageUrl: 'BBBBBB'
           },
           elemDefault
         );
@@ -101,7 +102,8 @@ describe('Service Tests', () => {
             title: 'BBBBBB',
             desc: 'BBBBBB',
             completionDate: currentDate.format(DATE_TIME_FORMAT),
-            status: 'BBBBBB'
+            status: 'BBBBBB',
+            imageUrl: 'BBBBBB'
           },
           elemDefault
         );

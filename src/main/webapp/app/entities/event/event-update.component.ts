@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
+import { HttpResponse, HttpClient, HttpRequest, HttpEvent, HttpEventType, HttpHeaders } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
@@ -16,6 +16,9 @@ import { ILocalisation } from 'app/shared/model/localisation.model';
 import { LocalisationService } from 'app/entities/localisation/localisation.service';
 import { IUser } from 'app/core/user/user.model';
 import { UserService } from 'app/core/user/user.service';
+import { SERVER_API_URL } from 'app/app.constants';
+import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
+import { FileUploader } from 'ng2-file-upload';
 
 type SelectableEntity = IEventType | ILocalisation | IUser;
 
@@ -24,6 +27,7 @@ type SelectableEntity = IEventType | ILocalisation | IUser;
   templateUrl: './event-update.component.html'
 })
 export class EventUpdateComponent implements OnInit {
+  public resourceUrl = SERVER_API_URL + 'api/events/upload/';
   isSaving = false;
 
   eventtypes: IEventType[] = [];
@@ -32,12 +36,15 @@ export class EventUpdateComponent implements OnInit {
 
   users: IUser[] = [];
 
+  public uploader: FileUploader;
+
   editForm = this.fb.group({
     id: [],
     title: [null, [Validators.required]],
     desc: [],
     completionDate: [],
     status: [null, [Validators.required]],
+    imageUrl: [],
     typeId: [null, Validators.required],
     localisationId: [null, Validators.required],
     responsibleId: [null, Validators.required],
@@ -50,8 +57,12 @@ export class EventUpdateComponent implements OnInit {
     protected localisationService: LocalisationService,
     protected userService: UserService,
     protected activatedRoute: ActivatedRoute,
-    private fb: FormBuilder
-  ) {}
+    private fb: FormBuilder,
+    private authServerProvider: AuthServerProvider,
+    private http: HttpClient
+  ) {
+    this.uploader = new FileUploader({});
+  }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ event }) => {
@@ -84,6 +95,15 @@ export class EventUpdateComponent implements OnInit {
         )
         .subscribe((resBody: IUser[]) => (this.users = resBody));
     });
+    this.uploader = new FileUploader({
+      url: this.resourceUrl,
+      authTokenHeader: 'Authorization',
+      authToken: 'Bearer ' + this.authServerProvider.getToken(),
+      isHTML5: true
+    });
+    this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
+      this.editForm.get(['imageUrl'])!.setValue(response);
+    };
   }
 
   updateForm(event: IEvent): void {
@@ -93,6 +113,7 @@ export class EventUpdateComponent implements OnInit {
       desc: event.desc,
       completionDate: event.completionDate != null ? event.completionDate.format(DATE_TIME_FORMAT) : null,
       status: event.status,
+      imageUrl: event.imageUrl,
       typeId: event.typeId,
       localisationId: event.localisationId,
       responsibleId: event.responsibleId,
@@ -125,6 +146,7 @@ export class EventUpdateComponent implements OnInit {
           ? moment(this.editForm.get(['completionDate'])!.value, DATE_TIME_FORMAT)
           : undefined,
       status: this.editForm.get(['status'])!.value,
+      imageUrl: this.editForm.get(['imageUrl'])!.value,
       typeId: this.editForm.get(['typeId'])!.value,
       localisationId: this.editForm.get(['localisationId'])!.value,
       responsibleId: this.editForm.get(['responsibleId'])!.value,

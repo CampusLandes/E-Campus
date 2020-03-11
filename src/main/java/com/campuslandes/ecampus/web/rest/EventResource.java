@@ -1,5 +1,6 @@
 package com.campuslandes.ecampus.web.rest;
 
+import com.campuslandes.ecampus.security.SecurityUtils;
 import com.campuslandes.ecampus.service.EventService;
 import com.campuslandes.ecampus.web.rest.errors.BadRequestAlertException;
 import com.campuslandes.ecampus.service.dto.EventDTO;
@@ -7,6 +8,8 @@ import com.campuslandes.ecampus.service.dto.EventDTO;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+
+import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,13 +20,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 /**
  * REST controller for managing {@link com.campuslandes.ecampus.domain.Event}.
@@ -35,6 +44,8 @@ public class EventResource {
     private final Logger log = LoggerFactory.getLogger(EventResource.class);
 
     private static final String ENTITY_NAME = "event";
+
+    private static String UPLOADED_FOLDER = "/Jhipster/file/upload/";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
@@ -104,6 +115,36 @@ public class EventResource {
         }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @PostMapping("/events/upload/")
+    public String uploadFile(@RequestParam("file") MultipartFile file) {
+        log.debug("REST request to upload File");
+        String name = file.getOriginalFilename();
+        String[] fileNameSplit = name.split(Pattern.quote("."));
+        String fileName = "";
+        for (String str : fileNameSplit) fileName += str+".";
+        name = SecurityUtils.getCurrentUserLogin().get();
+        String url = UPLOADED_FOLDER + DigestUtils.sha256Hex(fileName) + "."+ fileNameSplit[fileNameSplit.length-1];
+        if (file.isEmpty()) {
+            new Exception("NO FILE");
+        }
+        Path path = Paths.get(url);
+        try {
+
+            // Get the file and save it somewhere
+            byte[] bytes = file.getBytes();
+            if (!Files.exists(Paths.get(UPLOADED_FOLDER + name + "/")))
+                Files.createDirectories(Paths.get(UPLOADED_FOLDER + name + "/"));
+            if (!Files.exists(path)) {
+                Files.write(path, bytes);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return url;
     }
 
     /**

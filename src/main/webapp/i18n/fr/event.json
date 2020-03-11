@@ -20,6 +20,7 @@
       "desc": "Desc",
       "completionDate": "Completion Date",
       "status": "Status",
+      "imageUrl": "Image Url",
       "type": "Type",
       "localisation": "Localisation",
       "responsible": "Responsible",

@@ -8,3 +8,4 @@ build/
 node/
 postcss.config.js
 shared-libs.module.ts
+event-update.component.ts
