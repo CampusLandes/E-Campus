@@ -5,10 +5,18 @@ import { AlertComponent } from './alert/alert.component';
 import { AlertErrorComponent } from './alert/alert-error.component';
 import { LoginModalComponent } from './login/login.component';
 import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
+import { LoginWithoutloginComponent } from './login-withoutlogin/login-withoutlogin.component';
 
 @NgModule({
   imports: [ECampusSharedLibsModule],
-  declarations: [FindLanguageFromKeyPipe, AlertComponent, AlertErrorComponent, LoginModalComponent, HasAnyAuthorityDirective],
+  declarations: [
+    FindLanguageFromKeyPipe,
+    AlertComponent,
+    AlertErrorComponent,
+    LoginModalComponent,
+    HasAnyAuthorityDirective,
+    LoginWithoutloginComponent
+  ],
   entryComponents: [LoginModalComponent],
   exports: [
     ECampusSharedLibsModule,
@@ -16,6 +24,7 @@ import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
     AlertComponent,
     AlertErrorComponent,
     LoginModalComponent,
+    LoginWithoutloginComponent,
     HasAnyAuthorityDirective
   ]
 })

@@ -1,6 +1,7 @@
 {
   "home": {
-    "title": "Welcome, Java Hipster!",
+    "title": "Welcome on E-Campus",
+    "DaysLeft": " days left",
     "subtitle": "This is your homepage",
     "logged": {
       "message": "You are logged in as user \"{{username}}\"."
