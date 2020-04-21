@@ -72,7 +72,14 @@ export class EventUpdateComponent implements OnInit {
     private authServerProvider: AuthServerProvider,
     private http: HttpClient
   ) {
-    this.uploader = new FileUploader({});
+    this.uploader = new FileUploader({
+      url: this.resourceUrl,
+      isHTML5: true,
+      allowedFileType: ['image'],
+      maxFileSize: 5 * 1024 * 1024,
+      authTokenHeader: 'Authorization',
+      authToken: 'Bearer ' + this.authServerProvider.getToken()
+    });
   }
 
   ngOnInit(): void {
@@ -118,12 +125,6 @@ export class EventUpdateComponent implements OnInit {
         .subscribe((resBody: IUser[]) => {
           this.users = resBody;
         });
-    });
-    this.uploader = new FileUploader({
-      url: this.resourceUrl,
-      authTokenHeader: 'Authorization',
-      authToken: 'Bearer ' + this.authServerProvider.getToken(),
-      isHTML5: true
     });
     this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
       this.editForm.get(['imageUrl'])!.setValue(response);
