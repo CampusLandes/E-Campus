@@ -37,7 +37,11 @@
                 <td>{{event.desc}}</td>
                 <td>{{event.completionDate | date:'medium'}}</td>
                 <td jhiTranslate="{{'eCampusApp.EventStatus.' + event.status}}">{{event.status}}</td>
-                <td>{{event.imageUrl}}</td>
+                <td>
+                    <p>
+                        <img style="max-width: 300px;max-height: 150px;" src="{{getimageUrl(event)}}">
+                    </p>
+                </td>
                 <td>
                     <div *ngIf="event.typeId">
                         <a [routerLink]="['/event-type', event.typeId , 'view' ]" >{{event.typeName}}</a>

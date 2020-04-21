@@ -3,6 +3,7 @@ package com.campuslandes.ecampus.web.rest;
 import com.campuslandes.ecampus.security.SecurityUtils;
 import com.campuslandes.ecampus.service.EventService;
 import com.campuslandes.ecampus.web.rest.errors.BadRequestAlertException;
+import com.campuslandes.ecampus.web.rest.utils.randomUtils;
 import com.campuslandes.ecampus.service.dto.EventDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -10,6 +11,7 @@ import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.poi.util.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +27,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -60,7 +67,9 @@ public class EventResource {
      * {@code POST  /events} : Create a new event.
      *
      * @param eventDTO the eventDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new eventDTO, or with status {@code 400 (Bad Request)} if the event has already an ID.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+     *         body the new eventDTO, or with status {@code 400 (Bad Request)} if
+     *         the event has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/events")
@@ -70,18 +79,21 @@ public class EventResource {
             throw new BadRequestAlertException("A new event cannot already have an ID", ENTITY_NAME, "idexists");
         }
         EventDTO result = eventService.save(eventDTO);
-        return ResponseEntity.created(new URI("/api/events/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        return ResponseEntity
+                .created(new URI("/api/events/" + result.getId())).headers(HeaderUtil
+                        .createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+                .body(result);
     }
 
     /**
      * {@code PUT  /events} : Updates an existing event.
      *
      * @param eventDTO the eventDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated eventDTO,
-     * or with status {@code 400 (Bad Request)} if the eventDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the eventDTO couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated eventDTO, or with status {@code 400 (Bad Request)} if the
+     *         eventDTO is not valid, or with status
+     *         {@code 500 (Internal Server Error)} if the eventDTO couldn't be
+     *         updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/events")
@@ -91,21 +103,24 @@ public class EventResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         EventDTO result = eventService.save(eventDTO);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, eventDTO.getId().toString()))
-            .body(result);
+        return ResponseEntity.ok().headers(
+                HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, eventDTO.getId().toString()))
+                .body(result);
     }
 
     /**
      * {@code GET  /events} : get all the events.
      *
-
-     * @param pageable the pagination information.
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of events in body.
+     *
+     * @param pageable  the pagination information.
+     * @param eagerload flag to eager load entities from relationships (This is
+     *                  applicable for many-to-many).
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
+     *         of events in body.
      */
     @GetMapping("/events")
-    public ResponseEntity<List<EventDTO>> getAllEvents(Pageable pageable, @RequestParam(required = false, defaultValue = "false") boolean eagerload) {
+    public ResponseEntity<List<EventDTO>> getAllEvents(Pageable pageable,
+            @RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get a page of Events");
         Page<EventDTO> page;
         if (eagerload) {
@@ -113,7 +128,8 @@ public class EventResource {
         } else {
             page = eventService.findAll(pageable);
         }
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        HttpHeaders headers = PaginationUtil
+                .generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
@@ -123,13 +139,24 @@ public class EventResource {
         String name = file.getOriginalFilename();
         String[] fileNameSplit = name.split(Pattern.quote("."));
         String fileName = "";
-        for (String str : fileNameSplit) fileName += str+".";
-        name = SecurityUtils.getCurrentUserLogin().get();
-        String url = UPLOADED_FOLDER + DigestUtils.sha256Hex(fileName) + "."+ fileNameSplit[fileNameSplit.length-1];
         if (file.isEmpty()) {
             new Exception("NO FILE");
         }
-        Path path = Paths.get(url);
+        for (String str : fileNameSplit)
+            fileName += str + ".";
+        name = SecurityUtils.getCurrentUserLogin().get();
+        String shaName = DigestUtils.sha256Hex(fileName) + "." + fileNameSplit[fileNameSplit.length - 1];
+        Path path;
+        int x = 0;
+        do {
+            if (x > 0)
+                shaName = DigestUtils.sha256Hex(fileName + x) + "." + fileNameSplit[fileNameSplit.length - 1];
+            else
+                shaName = DigestUtils.sha256Hex(fileName) + "." + fileNameSplit[fileNameSplit.length - 1];
+            String url = UPLOADED_FOLDER + name + "/" + shaName;
+            path = Paths.get(url);
+            x += randomUtils.getRandomNumberInRange(0, 10000);
+        } while (Files.exists(path));
         try {
 
             // Get the file and save it somewhere
@@ -144,7 +171,29 @@ public class EventResource {
             e.printStackTrace();
         }
 
-        return url;
+        return shaName;
+    }
+
+    @GetMapping("/events/image/{image}")
+    public byte[] getEventsImage(@PathVariable String image) throws IOException {
+        log.debug("REST request to get a page of Events");
+        String[] fileNameSplit = image.split(Pattern.quote(":"));
+        File initialFile = new File("");
+        InputStream in = null;
+        if (fileNameSplit.length >= 2) {
+            try {
+                initialFile = new File(UPLOADED_FOLDER + fileNameSplit[0] + "/" + fileNameSplit[1]);
+                in = new FileInputStream(initialFile);
+            } catch (Exception e) {
+                //TODO: handle exception
+                in = getClass()
+            .getResourceAsStream("resources/NoImage.png");
+            }
+        }else {
+            in = getClass()
+            .getResourceAsStream("resources/NoImage.png");
+        }
+        return IOUtils.toByteArray(in);
     }
 
     /**

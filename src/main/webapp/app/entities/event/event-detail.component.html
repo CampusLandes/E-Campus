@@ -23,7 +23,9 @@
                 </dd>
                 <dt><span jhiTranslate="eCampusApp.event.imageUrl">Image Url</span></dt>
                 <dd>
-                    <span>{{event.imageUrl}}</span>
+                    <p>
+                        <img style="max-width: 300px;max-height: 150px;" src="{{getimageUrl(event)}}">
+                    </p>
                 </dd>
                 <dt><span jhiTranslate="userManagement.createdBy">Created By</span></dt>
                 <dd>{{event.createdBy}}</dd>

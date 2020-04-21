@@ -10,12 +10,15 @@ import { IEvent } from 'app/shared/model/event.model';
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { EventService } from './event.service';
 import { EventDeleteDialogComponent } from './event-delete-dialog.component';
+import { SERVER_API_URL } from 'app/app.constants';
 
 @Component({
   selector: 'jhi-event',
   templateUrl: './event.component.html'
 })
 export class EventComponent implements OnInit, OnDestroy {
+  public img_url = SERVER_API_URL + 'api/events/image/';
+
   events?: IEvent[];
   eventSubscriber?: Subscription;
   totalItems = 0;
@@ -84,6 +87,10 @@ export class EventComponent implements OnInit, OnDestroy {
       result.push('id');
     }
     return result;
+  }
+
+  getimageUrl(event: IEvent): String {
+    return this.img_url + event.responsibleLogin + ':' + event.imageUrl;
   }
 
   protected onSuccess(data: IEvent[] | null, headers: HttpHeaders, page: number): void {

@@ -26,7 +26,7 @@
                         </div>
                     </td>
                     <td nowrap>
-                        <button type="button" class="btn btn-success btn-xs" (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                        <button type="button" class="btn btn-success btn-xs" (click)="item.upload(); haveimg=false;" [disabled]="item.isReady || item.isUploading || item.isSuccess">
               <fa-icon icon="faArrowAltCircleUp" fixedWidth="true"></fa-icon> Upload
             </button>
                         <button type="button" class="btn btn-warning btn-xs" (click)="item.cancel()" [disabled]="!item.isUploading">
@@ -47,7 +47,7 @@
                     <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
                 </div>
             </div>
-            <button type="button" class="btn btn-success btn-s" (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+            <button type="button" class="btn btn-success btn-s" (click)="uploader.uploadAll(); haveimg=false;" [disabled]="!uploader.getNotUploadedItems().length">
         <span class="glyphicon glyphicon-upload"></span> Upload all
       </button>
             <button type="button" class="btn btn-warning btn-s" (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
@@ -102,9 +102,16 @@
                         </small>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="eCampusApp.event.imageUrl" for="field_imageUrl">Image Url</label>
-                    <input type="text" class="form-control" name="imageUrl" id="field_imageUrl" formControlName="imageUrl" />
+                <div class="row justify-content-center">
+                    <div class="col-2">
+                        <p>
+                            <img style="width: 100%;" src="{{getimageUrl()}}">
+                        </p>
+                    </div>
+                    <div class="col-10 form-group">
+                        <label class="form-control-label" jhiTranslate="eCampusApp.event.imageUrl" for="field_imageUrl">Image Url</label>
+                        <input type="text" class="form-control" name="imageUrl" id="field_imageUrl" formControlName="imageUrl" disabled/>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -133,7 +140,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="eCampusApp.event.responsible" for="field_responsible">Responsible</label>
-                    <select class="form-control" id="field_responsible" name="responsible" formControlName="responsibleId">
+                    <select class="form-control" id="field_responsible" name="responsible" formControlName="responsibleId" disabled>
                         <option *ngIf="!editForm.get('responsibleId')!.value" [ngValue]="null" selected></option>
                         <option [ngValue]="userOption.id" *ngFor="let userOption of users; trackBy: trackById">{{userOption.login}}</option>
                     </select>

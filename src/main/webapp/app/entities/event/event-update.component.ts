@@ -14,11 +14,14 @@ import { IEventType } from 'app/shared/model/event-type.model';
 import { EventTypeService } from 'app/entities/event-type/event-type.service';
 import { ILocalisation } from 'app/shared/model/localisation.model';
 import { LocalisationService } from 'app/entities/localisation/localisation.service';
-import { IUser } from 'app/core/user/user.model';
+import { IUser, User } from 'app/core/user/user.model';
 import { UserService } from 'app/core/user/user.service';
 import { SERVER_API_URL } from 'app/app.constants';
 import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
 import { FileUploader } from 'ng2-file-upload';
+import { AccountService } from 'app/core/auth/account.service';
+import { Account } from 'app/core/user/account.model';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 type SelectableEntity = IEventType | ILocalisation | IUser;
 
@@ -28,13 +31,20 @@ type SelectableEntity = IEventType | ILocalisation | IUser;
 })
 export class EventUpdateComponent implements OnInit {
   public resourceUrl = SERVER_API_URL + 'api/events/upload/';
+  public img_url = SERVER_API_URL + 'api/events/image/';
   isSaving = false;
+
+  public img = '';
+  public haveimg = true;
 
   eventtypes: IEventType[] = [];
 
   localisations: ILocalisation[] = [];
 
   users: IUser[] = [];
+
+  currentUser: IUser = new User();
+  account!: Account;
 
   public uploader: FileUploader;
 
@@ -56,6 +66,7 @@ export class EventUpdateComponent implements OnInit {
     protected eventTypeService: EventTypeService,
     protected localisationService: LocalisationService,
     protected userService: UserService,
+    protected accountService: AccountService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private authServerProvider: AuthServerProvider,
@@ -68,6 +79,17 @@ export class EventUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ event }) => {
       this.updateForm(event);
 
+      this.accountService.identity(true).subscribe(account => {
+        if (account) {
+          this.account = account;
+          this.userService.find(this.account.login).subscribe(resBody => {
+            if (resBody) {
+              this.currentUser = resBody;
+              if (!event.responsibleId) this.updateResponsible(this.currentUser.id, event);
+            }
+          });
+        }
+      });
       this.eventTypeService
         .query()
         .pipe(
@@ -93,7 +115,9 @@ export class EventUpdateComponent implements OnInit {
             return res.body ? res.body : [];
           })
         )
-        .subscribe((resBody: IUser[]) => (this.users = resBody));
+        .subscribe((resBody: IUser[]) => {
+          this.users = resBody;
+        });
     });
     this.uploader = new FileUploader({
       url: this.resourceUrl,
@@ -103,6 +127,8 @@ export class EventUpdateComponent implements OnInit {
     });
     this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
       this.editForm.get(['imageUrl'])!.setValue(response);
+      this.img = response;
+      this.haveimg = true;
     };
   }
 
@@ -117,6 +143,25 @@ export class EventUpdateComponent implements OnInit {
       typeId: event.typeId,
       localisationId: event.localisationId,
       responsibleId: event.responsibleId,
+      participants: event.participants
+    });
+  }
+
+  getimageUrl(): String {
+    return this.img_url + this.account.login + ':' + this.img;
+  }
+
+  updateResponsible(id: number, event: IEvent): void {
+    this.editForm.patchValue({
+      id: event.id,
+      title: event.title,
+      desc: event.desc,
+      completionDate: event.completionDate != null ? event.completionDate.format(DATE_TIME_FORMAT) : null,
+      status: event.status,
+      imageUrl: event.imageUrl,
+      typeId: event.typeId,
+      localisationId: event.localisationId,
+      responsibleId: id,
       participants: event.participants
     });
   }
