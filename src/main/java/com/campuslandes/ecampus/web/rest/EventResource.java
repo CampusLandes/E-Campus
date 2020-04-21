@@ -18,8 +18,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +27,6 @@ import javax.validation.Valid;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -52,7 +49,7 @@ public class EventResource {
 
     private static final String ENTITY_NAME = "event";
 
-    private static String UPLOADED_FOLDER = "/Jhipster/file/upload/";
+    private static String UPLOADED_FOLDER = "/Jhipster/file/upload/Event/";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
