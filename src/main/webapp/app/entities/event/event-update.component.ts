@@ -22,6 +22,9 @@ import { FileUploader } from 'ng2-file-upload';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { AlertErrorComponent } from 'app/shared/alert/alert-error.component';
+import { AlertComponent } from 'app/shared/alert/alert.component';
+import { JhiAlertService } from 'ng-jhipster';
 
 type SelectableEntity = IEventType | ILocalisation | IUser;
 
@@ -70,12 +73,13 @@ export class EventUpdateComponent implements OnInit {
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private authServerProvider: AuthServerProvider,
+    private alertService: JhiAlertService,
     private http: HttpClient
   ) {
     this.uploader = new FileUploader({
       url: this.resourceUrl,
       isHTML5: true,
-      allowedFileType: ['image'],
+      //allowedFileType: ['image'],
       maxFileSize: 5 * 1024 * 1024,
       authTokenHeader: 'Authorization',
       authToken: 'Bearer ' + this.authServerProvider.getToken()
@@ -127,8 +131,16 @@ export class EventUpdateComponent implements OnInit {
         });
     });
     this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
-      this.editForm.get(['imageUrl'])!.setValue(response);
-      this.img = response;
+      // eslint-disable-next-line no-console
+      console.log(status);
+      // eslint-disable-next-line no-console
+      console.log(item);
+      if (status === 200) {
+        this.editForm.get(['imageUrl'])!.setValue(response);
+        this.img = response;
+      } else {
+        this.alertService.error('error.http.' + status);
+      }
       this.haveimg = true;
     };
   }

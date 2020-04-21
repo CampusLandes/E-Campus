@@ -131,13 +131,18 @@ public class EventResource {
     }
 
     @PostMapping("/events/upload/")
-    public String uploadFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
         log.debug("REST request to upload File");
+        String contentType = file.getContentType();
+        if (isNotImage(contentType)) {
+            return ResponseEntity.badRequest().body("BAD TYPE");
+        }
+
         String name = file.getOriginalFilename();
         String[] fileNameSplit = name.split(Pattern.quote("."));
         String fileName = "";
         if (file.isEmpty()) {
-            new Exception("NO FILE");
+            return ResponseEntity.badRequest().body("NO FILE");
         }
         for (String str : fileNameSplit)
             fileName += str + ".";
@@ -168,7 +173,11 @@ public class EventResource {
             e.printStackTrace();
         }
 
-        return shaName;
+        return ResponseEntity.ok(shaName);
+    }
+
+    private boolean isNotImage(String contentType) {
+        return !contentType.toLowerCase().trim().contains("image");
     }
 
     @GetMapping("/events/image/{image}")
