@@ -79,7 +79,7 @@ export class EventUpdateComponent implements OnInit {
     this.uploader = new FileUploader({
       url: this.resourceUrl,
       isHTML5: true,
-      //allowedFileType: ['image'],
+      allowedFileType: ['image'],
       maxFileSize: 5 * 1024 * 1024,
       authTokenHeader: 'Authorization',
       authToken: 'Bearer ' + this.authServerProvider.getToken()
@@ -131,10 +131,6 @@ export class EventUpdateComponent implements OnInit {
         });
     });
     this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
-      // eslint-disable-next-line no-console
-      console.log(status);
-      // eslint-disable-next-line no-console
-      console.log(item);
       if (status === 200) {
         this.editForm.get(['imageUrl'])!.setValue(response);
         this.img = response;
