@@ -21,6 +21,12 @@
                 <dd>
                     <span jhiTranslate="{{'eCampusApp.EventStatus.' + event.status}}">{{event.status}}</span>
                 </dd>
+                <dt><span jhiTranslate="eCampusApp.event.imageUrl">Image Url</span></dt>
+                <dd>
+                    <p>
+                        <img style="max-width: 300px;max-height: 150px;" src="{{getimageUrl(event)}}">
+                    </p>
+                </dd>
                 <dt><span jhiTranslate="userManagement.createdBy">Created By</span></dt>
                 <dd>{{event.createdBy}}</dd>
                 <dt><span jhiTranslate="userManagement.createdDate">Created Date</span></dt>

@@ -6,10 +6,11 @@ import { EventComponent } from './event.component';
 import { EventDetailComponent } from './event-detail.component';
 import { EventUpdateComponent } from './event-update.component';
 import { EventDeleteDialogComponent } from './event-delete-dialog.component';
+import { FileUploadModule } from 'ng2-file-upload';
 import { eventRoute } from './event.route';
 
 @NgModule({
-  imports: [ECampusSharedModule, RouterModule.forChild(eventRoute)],
+  imports: [ECampusSharedModule, RouterModule.forChild(eventRoute), FileUploadModule],
   declarations: [EventComponent, EventDetailComponent, EventUpdateComponent, EventDeleteDialogComponent],
   entryComponents: [EventDeleteDialogComponent]
 })

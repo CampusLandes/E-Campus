@@ -8,6 +8,7 @@ export interface IEvent {
   desc?: string;
   completionDate?: Moment;
   status?: EventStatus;
+  imageUrl?: string;
   typeName?: string;
   typeId?: number;
   localisationName?: string;
@@ -28,6 +29,7 @@ export class Event implements IEvent {
     public desc?: string,
     public completionDate?: Moment,
     public status?: EventStatus,
+    public imageUrl?: string,
     public typeName?: string,
     public typeId?: number,
     public localisationName?: string,

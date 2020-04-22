@@ -1,4 +1,67 @@
 <div class="row justify-content-center">
+    <div class="col-4">
+        <input type="file" accept="image/*" ng2FileSelect [uploader]="uploader" />
+    </div>
+    <div class="col-8">
+
+        <h3>Upload queue</h3>
+        <p>Queue length: {{ uploader?.queue?.length }}</p>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th width="50%">Name</th>
+                    <th>Size</th>
+                    <th>Progress</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of uploader.queue">
+                    <td><strong>{{ item?.file?.name }}</strong></td>
+                    <td nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+                    <td>
+                        <div class="progress" style="margin-bottom: 0;">
+                            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                        </div>
+                    </td>
+                    <td nowrap>
+                        <button type="button" class="btn btn-success btn-xs" (click)="item.upload(); haveimg=false;" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+              <fa-icon icon="faArrowAltCircleUp" fixedWidth="true"></fa-icon> Upload
+            </button>
+                        <button type="button" class="btn btn-warning btn-xs" (click)="item.cancel()" [disabled]="!item.isUploading">
+              <fa-icon icon="hdd" fixedWidth="true"></fa-icon>Cancel
+            </button>
+                        <button type="button" class="btn btn-danger btn-xs" (click)="item.remove()">
+              <fa-icon icon="faTrashAlt" fixedWidth="true"></fa-icon> Remove
+            </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div>
+            <div>
+                Queue progress:
+                <div class="progress" style="">
+                    <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-success btn-s" (click)="uploader.uploadAll(); haveimg=false;" [disabled]="!uploader.getNotUploadedItems().length">
+        <span class="glyphicon glyphicon-upload"></span> Upload all
+      </button>
+            <button type="button" class="btn btn-warning btn-s" (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
+        <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
+      </button>
+            <button type="button" class="btn btn-danger btn-s" (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
+        <span class="glyphicon glyphicon-trash"></span> Remove all
+      </button>
+        </div>
+    </div>
+</div>
+<hr>
+<div class="row justify-content-center">
+
     <div class="col-8">
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
             <h2 id="jhi-event-heading" jhiTranslate="eCampusApp.event.home.createOrEditLabel">Create or edit a Event</h2>
@@ -6,29 +69,25 @@
                 <jhi-alert-error></jhi-alert-error>
                 <div class="form-group" [hidden]="!editForm.get('id')!.value">
                     <label for="id" jhiTranslate="global.field.id">ID</label>
-                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
-                        readonly />
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="eCampusApp.event.title" for="field_title">Title</label>
-                    <input type="text" class="form-control" name="title" id="field_title"
-                           formControlName="title"/>
+                    <input type="text" class="form-control" name="title" id="field_title" formControlName="title" />
                     <div *ngIf="editForm.get('title')!.invalid && (editForm.get('title')!.dirty || editForm.get('title')!.touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('title')?.errors?.required" jhiTranslate="entity.validation.required">
+                        <small class="form-text text-danger" *ngIf="editForm.get('title')?.errors?.required" jhiTranslate="entity.validation.required">
                         This field is required.
                         </small>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="eCampusApp.event.desc" for="field_desc">Desc</label>
-                    <input type="text" class="form-control" name="desc" id="field_desc"
-                           formControlName="desc"/>
+                    <input type="text" class="form-control" name="desc" id="field_desc" formControlName="desc" />
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="eCampusApp.event.completionDate" for="field_completionDate">Completion Date</label>
                     <div class="d-flex">
-                        <input id="field_completionDate" type="datetime-local" class="form-control" name="completionDate" formControlName="completionDate" placeholder="YYYY-MM-DD HH:mm"/>
+                        <input id="field_completionDate" type="datetime-local" class="form-control" name="completionDate" formControlName="completionDate" placeholder="YYYY-MM-DD HH:mm" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -38,10 +97,20 @@
                         <option value="PUBLIC">{{'eCampusApp.EventStatus.PUBLIC' | translate}}</option>
                     </select>
                     <div *ngIf="editForm.get('status')!.invalid && (editForm.get('status')!.dirty || editForm.get('status')!.touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('status')?.errors?.required" jhiTranslate="entity.validation.required">
+                        <small class="form-text text-danger" *ngIf="editForm.get('status')?.errors?.required" jhiTranslate="entity.validation.required">
                         This field is required.
                         </small>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-2">
+                        <p>
+                            <img style="width: 100%;" src="{{getimageUrl()}}">
+                        </p>
+                    </div>
+                    <div class="col-10 form-group">
+                        <label class="form-control-label" jhiTranslate="eCampusApp.event.imageUrl" for="field_imageUrl">Image Url</label>
+                        <input type="text" class="form-control" name="imageUrl" id="field_imageUrl" formControlName="imageUrl" disabled/>
                     </div>
                 </div>
 
@@ -53,8 +122,7 @@
                     </select>
                 </div>
                 <div *ngIf="editForm.get('typeId')!.invalid && (editForm.get('typeId')!.dirty || editForm.get('typeId')!.touched)">
-                    <small class="form-text text-danger"
-                           *ngIf="editForm.get('typeId')?.errors?.required" jhiTranslate="entity.validation.required">
+                    <small class="form-text text-danger" *ngIf="editForm.get('typeId')?.errors?.required" jhiTranslate="entity.validation.required">
                         This field is required.
                     </small>
                 </div>
@@ -66,21 +134,19 @@
                     </select>
                 </div>
                 <div *ngIf="editForm.get('localisationId')!.invalid && (editForm.get('localisationId')!.dirty || editForm.get('localisationId')!.touched)">
-                    <small class="form-text text-danger"
-                           *ngIf="editForm.get('localisationId')?.errors?.required" jhiTranslate="entity.validation.required">
+                    <small class="form-text text-danger" *ngIf="editForm.get('localisationId')?.errors?.required" jhiTranslate="entity.validation.required">
                         This field is required.
                     </small>
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="eCampusApp.event.responsible" for="field_responsible">Responsible</label>
-                    <select class="form-control" id="field_responsible" name="responsible" formControlName="responsibleId">
+                    <select class="form-control" id="field_responsible" name="responsible" formControlName="responsibleId" disabled>
                         <option *ngIf="!editForm.get('responsibleId')!.value" [ngValue]="null" selected></option>
                         <option [ngValue]="userOption.id" *ngFor="let userOption of users; trackBy: trackById">{{userOption.login}}</option>
                     </select>
                 </div>
                 <div *ngIf="editForm.get('responsibleId')!.invalid && (editForm.get('responsibleId')!.dirty || editForm.get('responsibleId')!.touched)">
-                    <small class="form-text text-danger"
-                           *ngIf="editForm.get('responsibleId')?.errors?.required" jhiTranslate="entity.validation.required">
+                    <small class="form-text text-danger" *ngIf="editForm.get('responsibleId')?.errors?.required" jhiTranslate="entity.validation.required">
                         This field is required.
                     </small>
                 </div>
@@ -92,7 +158,7 @@
                 </div>
             </div>
             <div>
-                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
                     <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
                 </button>
                 <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">

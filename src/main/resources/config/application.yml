@@ -86,6 +86,10 @@ spring:
     name: ECampus
   jmx:
     enabled: false
+  servlet:
+    multipart:
+      max-file-size: 128MB
+      max-request-size: 128MB
   data:
     jpa:
       repositories:

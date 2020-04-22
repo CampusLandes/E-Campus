@@ -10,10 +10,19 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link Event}.
@@ -23,6 +32,8 @@ import java.util.Optional;
 public class EventServiceImpl implements EventService {
 
     private final Logger log = LoggerFactory.getLogger(EventServiceImpl.class);
+
+    private static String UPLOADED_FOLDER = "/Jhipster/file/upload/Event";
 
     private final EventRepository eventRepository;
 
@@ -69,7 +80,7 @@ public class EventServiceImpl implements EventService {
     public Page<EventDTO> findAllWithEagerRelationships(Pageable pageable) {
         return eventRepository.findAllWithEagerRelationships(pageable).map(eventMapper::toDto);
     }
-    
+
 
     /**
      * Get one event by id.
@@ -94,5 +105,51 @@ public class EventServiceImpl implements EventService {
     public void delete(Long id) {
         log.debug("Request to delete Event : {}", id);
         eventRepository.deleteById(id);
+    }
+
+
+
+    @Scheduled(cron="0 1 1 * * *")
+    public void cleanNotUseFile () {
+        File folder = new File(UPLOADED_FOLDER);
+        File[] listOfFiles = folder.listFiles();
+
+        List<Event> events = eventRepository.findAll();
+        for (File file : listOfFiles) {
+            if (file.isFile()) {
+                System.out.println("File " + file.getName());
+            } else if (file.isDirectory()) {
+                System.out.println("Directory " + file.getName());
+                List<Event> eventsForNameFolder = events.stream().filter(event -> event.getResponsible().getLogin().equals(file.getName())).collect(Collectors.toList());
+                File[] listOfFiles2 = file.listFiles();
+                for(File file2 : listOfFiles2) {
+                    if (!eventsForNameFolder.stream().filter(o -> o.getImageUrl().equals(file2.getName())).findFirst().isPresent()) {
+                        System.out.println("Delete file " + file2.getName());
+                        deleteFile(file2);
+                    }
+                }
+            }
+        }
+
+    }
+
+    public void deleteFile(File file) {
+        try
+        {
+            Files.deleteIfExists(Paths.get(file.getPath()));
+        }
+        catch(NoSuchFileException e)
+        {
+            log.debug("No such file/directory exists");
+        }
+        catch(DirectoryNotEmptyException e)
+        {
+            log.debug("Directory is not empty.");
+        }
+        catch(IOException e)
+        {
+            log.debug("Invalid permissions.");
+        }
+        log.debug("Deletion successful.");
     }
 }
