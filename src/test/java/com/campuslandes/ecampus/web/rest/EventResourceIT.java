@@ -6,6 +6,7 @@ import com.campuslandes.ecampus.domain.EventType;
 import com.campuslandes.ecampus.domain.Localisation;
 import com.campuslandes.ecampus.domain.User;
 import com.campuslandes.ecampus.repository.EventRepository;
+import com.campuslandes.ecampus.repository.UserRepository;
 import com.campuslandes.ecampus.service.EventService;
 import com.campuslandes.ecampus.service.dto.EventDTO;
 import com.campuslandes.ecampus.service.mapper.EventMapper;
@@ -65,6 +66,9 @@ public class EventResourceIT {
     @Autowired
     private EventRepository eventRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Mock
     private EventRepository eventRepositoryMock;
 
@@ -99,7 +103,7 @@ public class EventResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final EventResource eventResource = new EventResource(eventService, eventRepository, eventMapper);
+        final EventResource eventResource = new EventResource(eventService, eventRepository, eventMapper, userRepository);
         this.restEventMockMvc = MockMvcBuilders.standaloneSetup(eventResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -296,7 +300,7 @@ public class EventResourceIT {
 
     @SuppressWarnings({"unchecked"})
     public void getAllEventsWithEagerRelationshipsIsEnabled() throws Exception {
-        EventResource eventResource = new EventResource(eventServiceMock, eventRepository, eventMapper);
+        EventResource eventResource = new EventResource(eventServiceMock, eventRepository, eventMapper, userRepository);
         when(eventServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
         MockMvc restEventMockMvc = MockMvcBuilders.standaloneSetup(eventResource)
@@ -313,7 +317,7 @@ public class EventResourceIT {
 
     @SuppressWarnings({"unchecked"})
     public void getAllEventsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        EventResource eventResource = new EventResource(eventServiceMock, eventRepository, eventMapper);
+        EventResource eventResource = new EventResource(eventServiceMock, eventRepository, eventMapper, userRepository);
             when(eventServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
             MockMvc restEventMockMvc = MockMvcBuilders.standaloneSetup(eventResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)

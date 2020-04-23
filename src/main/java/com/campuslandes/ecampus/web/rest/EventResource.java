@@ -2,7 +2,9 @@ package com.campuslandes.ecampus.web.rest;
 
 import com.campuslandes.ecampus.security.SecurityUtils;
 import com.campuslandes.ecampus.domain.Event;
+import com.campuslandes.ecampus.domain.User;
 import com.campuslandes.ecampus.repository.EventRepository;
+import com.campuslandes.ecampus.repository.UserRepository;
 import com.campuslandes.ecampus.service.EventService;
 import com.campuslandes.ecampus.web.rest.errors.BadRequestAlertException;
 import com.campuslandes.ecampus.web.rest.utils.randomUtils;
@@ -44,6 +46,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing {@link com.campuslandes.ecampus.domain.Event}.
@@ -65,12 +68,15 @@ public class EventResource {
 
     private final EventRepository eventRepository;
 
+    private final UserRepository userRepository;
+
     private final EventMapper eventMapper;
 
-    public EventResource(EventService eventService, EventRepository eventRepository, EventMapper eventMapper) {
+    public EventResource(EventService eventService, EventRepository eventRepository, EventMapper eventMapper, UserRepository userRepository) {
         this.eventService = eventService;
         this.eventRepository = eventRepository;
         this.eventMapper = eventMapper;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -219,6 +225,28 @@ public class EventResource {
     public ResponseEntity<List<EventDTO>> get10LastEvents() {
         log.debug("REST request to get a page of Events");
         List<Event> events = eventRepository.findAllPublic();
+        Collections.sort(events, new Comparator<Event>() {
+            @Override
+            public int compare(Event u1, Event u2) {
+              return u1.getCompletionDate().compareTo(u2.getCompletionDate());
+            }
+          });
+        List<EventDTO> eventDTOs = new ArrayList<>();
+        for (int i = 0; i < events.size() && i < 10; i++)  {
+            if (events.get(i).getCompletionDate().isAfter(Instant.now())){
+                eventDTOs.add(eventMapper.toDto(events.get(i)));
+            }
+        }
+        return ResponseEntity.ok().body(eventDTOs);
+    }
+
+    @GetMapping("/events/10LastPublicAndPrivate")
+    public ResponseEntity<List<EventDTO>> get10LastEventsPrivate() {
+        log.debug("REST request to get a page of Events");
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
+        List<Event> events = eventRepository.findAllPublic();
+        List<Event> eventsPrivate = eventRepository.findAllPrivate();
+        events.addAll(eventsPrivate.stream().filter(event -> event.getParticipants().contains(user)).collect(Collectors.toList()));
         Collections.sort(events, new Comparator<Event>() {
             @Override
             public int compare(Event u1, Event u2) {

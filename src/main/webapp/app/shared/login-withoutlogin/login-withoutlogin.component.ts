@@ -2,6 +2,7 @@ import { Component, Renderer, ElementRef, ViewChild, OnInit } from '@angular/cor
 import { LoginService } from 'app/core/login/login.service';
 import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
+import { JhiEventManager } from 'ng-jhipster';
 
 @Component({
   selector: 'jhi-login-withoutlogin',
@@ -19,7 +20,13 @@ export class LoginWithoutloginComponent implements OnInit {
     rememberMe: [false]
   });
 
-  constructor(private loginService: LoginService, private renderer: Renderer, private router: Router, private fb: FormBuilder) {}
+  constructor(
+    private loginService: LoginService,
+    private renderer: Renderer,
+    private router: Router,
+    private fb: FormBuilder,
+    private eventManager: JhiEventManager
+  ) {}
 
   ngOnInit(): void {
     if (this.username) {
@@ -45,6 +52,8 @@ export class LoginWithoutloginComponent implements OnInit {
       .subscribe(
         () => {
           this.authenticationError = false;
+          // Add broadcast event
+          this.eventManager.broadcast('UserLoginStatusChange');
           if (
             this.router.url === '/account/register' ||
             this.router.url.startsWith('/account/activate') ||
