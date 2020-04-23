@@ -2,7 +2,10 @@
   "home": {
     "title": "Welcome on E-Campus",
     "DaysLeft": " days left",
-    "subtitle": "This is your homepage",
+    "subtitle": {
+      "login": "Here are the next 10 events in which you will participate",
+      "logout": "Here are the next 10 public events"
+    },
     "logged": {
       "message": "You are logged in as user \"{{username}}\"."
     },

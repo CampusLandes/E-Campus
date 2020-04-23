@@ -1,20 +1,23 @@
 <div class="row">
     <div class="col-md-3" [ngSwitch]="isAuthenticated()">
         <div *ngSwitchCase="true" class="hipster img-fluid rounded"></div>
-       <div *ngSwitchCase="false"><jhi-login-withoutlogin></jhi-login-withoutlogin></div>
+        <div *ngSwitchCase="false">
+            <jhi-login-withoutlogin></jhi-login-withoutlogin>
+        </div>
     </div>
     <div class="col-md-9">
         <h1 class="display-4" jhiTranslate="home.title">Welcome, Java Hipster!</h1>
-        <p class="lead" jhiTranslate="home.subtitle">This is your homepage</p>
 
         <div [ngSwitch]="isAuthenticated()">
             <div class="alert alert-success" *ngSwitchCase="true">
+                <p class="lead" jhiTranslate="home.subtitle.login">This is your homepage</p>
                 <span id="home-logged-message" *ngIf="account" jhiTranslate="home.logged.message"
                     [translateValues]="{username: account.login}"> You are logged in as user "{{account.login}}".
                 </span>
             </div>
 
             <div *ngSwitchCase="false">
+                <p class="lead" jhiTranslate="home.subtitle.logout">This is your homepage</p>
                 <nz-list [nzDataSource]="publicEvent" [nzRenderItem]="item" [nzItemLayout]="'horizontal'"
                     [nzLoading]="loadingPublic">
                     <ng-template #item let-item>
@@ -23,11 +26,11 @@
                                 <p style="padding-right: 20px; margin-top: 15px;">{{getDate(item)}}<span
                                         jhiTranslate="home.DaysLeft"></span></p>
                             </ng-template>
-                            <nz-list-item-meta [nzTitle]="nzTitle"
-                                nzAvatar="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                            <!-- Modifier lien nzAvatar-->
+                            <nz-list-item-meta [nzTitle]="nzTitle" [nzAvatar]="getimageUrl(item)"
                                 [nzDescription]="item.desc">
                                 <ng-template #nzTitle>
-                                    <a href="https://ng.ant.design">{{ item.title }}</a>
+                                    <span>{{ item.title }}</span>
                                 </ng-template>
                             </nz-list-item-meta>
                         </nz-list-item>

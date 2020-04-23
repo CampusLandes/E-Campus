@@ -8,6 +8,7 @@ import { IEvent } from 'app/shared/model/event.model';
 import { EventService } from 'app/entities/event/event.service';
 import { HttpResponse } from '@angular/common/http';
 import * as moment from 'moment';
+import { SERVER_API_URL } from 'app/app.constants';
 
 @Component({
   selector: 'jhi-home',
@@ -15,6 +16,7 @@ import * as moment from 'moment';
   styleUrls: ['home.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy {
+  public img_url = SERVER_API_URL + 'api/events/image/';
   account: Account | null = null;
   authSubscription?: Subscription;
   publicEventSubscription?: Subscription;
@@ -55,10 +57,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     let diff = 0;
     if (item.completionDate) {
       diff = item.completionDate.diff(today, 'days');
-      //if (diff <0){
-      //  Code de suppression de l'event
-      //}
     }
     return ' ' + diff;
+  }
+
+  getimageUrl(event: IEvent): String {
+    return this.img_url + event.responsibleLogin + ':' + event.imageUrl;
   }
 }

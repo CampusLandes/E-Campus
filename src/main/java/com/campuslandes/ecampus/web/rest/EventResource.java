@@ -37,6 +37,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -226,7 +227,9 @@ public class EventResource {
           });
         List<EventDTO> eventDTOs = new ArrayList<>();
         for (int i = 0; i < events.size() && i < 10; i++)  {
-            eventDTOs.add(eventMapper.toDto(events.get(i)));
+            if (events.get(i).getCompletionDate().isAfter(Instant.now())){
+                eventDTOs.add(eventMapper.toDto(events.get(i)));
+            }
         }
         return ResponseEntity.ok().body(eventDTOs);
     }
