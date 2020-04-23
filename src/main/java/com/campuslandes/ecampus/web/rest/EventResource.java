@@ -1,10 +1,13 @@
 package com.campuslandes.ecampus.web.rest;
 
 import com.campuslandes.ecampus.security.SecurityUtils;
+import com.campuslandes.ecampus.domain.Event;
+import com.campuslandes.ecampus.repository.EventRepository;
 import com.campuslandes.ecampus.service.EventService;
 import com.campuslandes.ecampus.web.rest.errors.BadRequestAlertException;
 import com.campuslandes.ecampus.web.rest.utils.randomUtils;
 import com.campuslandes.ecampus.service.dto.EventDTO;
+import com.campuslandes.ecampus.service.mapper.EventMapper;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
@@ -34,6 +37,10 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -56,8 +63,14 @@ public class EventResource {
 
     private final EventService eventService;
 
-    public EventResource(EventService eventService) {
+    private final EventRepository eventRepository;
+
+    private final EventMapper eventMapper;
+
+    public EventResource(EventService eventService, EventRepository eventRepository, EventMapper eventMapper) {
         this.eventService = eventService;
+        this.eventRepository = eventRepository;
+        this.eventMapper = eventMapper;
     }
 
     /**
@@ -200,6 +213,25 @@ public class EventResource {
             .getResourceAsStream("resources/NoImage.png");
         }
         return IOUtils.toByteArray(in);
+    }
+
+    @GetMapping("/events/10LastPublic")
+    public ResponseEntity<List<EventDTO>> get10LastEvents() {
+        log.debug("REST request to get a page of Events");
+        List<Event> events = eventRepository.findAllPublic();
+        Collections.sort(events, new Comparator<Event>() {
+            @Override
+            public int compare(Event u1, Event u2) {
+              return u1.getCompletionDate().compareTo(u2.getCompletionDate());
+            }
+          });
+        List<EventDTO> eventDTOs = new ArrayList<>();
+        for (int i = 0; i < events.size() && i < 10; i++)  {
+            if (events.get(i).getCompletionDate().isAfter(Instant.now())){
+                eventDTOs.add(eventMapper.toDto(events.get(i)));
+            }
+        }
+        return ResponseEntity.ok().body(eventDTOs);
     }
 
     /**

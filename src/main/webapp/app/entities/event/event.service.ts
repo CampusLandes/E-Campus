@@ -39,6 +39,12 @@ export class EventService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
+  find10RecentPublicEvent(): Observable<EntityArrayResponseType> {
+    return this.http
+      .get<IEvent[]>(`${this.resourceUrl}/10LastPublic`, { observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+  }
+
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http

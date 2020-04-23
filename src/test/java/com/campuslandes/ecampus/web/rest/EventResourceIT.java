@@ -99,7 +99,7 @@ public class EventResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final EventResource eventResource = new EventResource(eventService);
+        final EventResource eventResource = new EventResource(eventService, eventRepository, eventMapper);
         this.restEventMockMvc = MockMvcBuilders.standaloneSetup(eventResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -293,10 +293,10 @@ public class EventResourceIT {
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
             .andExpect(jsonPath("$.[*].imageUrl").value(hasItem(DEFAULT_IMAGE_URL)));
     }
-    
+
     @SuppressWarnings({"unchecked"})
     public void getAllEventsWithEagerRelationshipsIsEnabled() throws Exception {
-        EventResource eventResource = new EventResource(eventServiceMock);
+        EventResource eventResource = new EventResource(eventServiceMock, eventRepository, eventMapper);
         when(eventServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
         MockMvc restEventMockMvc = MockMvcBuilders.standaloneSetup(eventResource)
@@ -313,7 +313,7 @@ public class EventResourceIT {
 
     @SuppressWarnings({"unchecked"})
     public void getAllEventsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        EventResource eventResource = new EventResource(eventServiceMock);
+        EventResource eventResource = new EventResource(eventServiceMock, eventRepository, eventMapper);
             when(eventServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
             MockMvc restEventMockMvc = MockMvcBuilders.standaloneSetup(eventResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)

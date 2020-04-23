@@ -1,7 +1,11 @@
 {
   "home": {
-    "title": "Welcome, Java Hipster!",
-    "subtitle": "This is your homepage",
+    "title": "Welcome on E-Campus",
+    "DaysLeft": " days left",
+    "subtitle": {
+      "login": "Here are the next 10 events in which you will participate",
+      "logout": "Here are the next 10 public events"
+    },
     "logged": {
       "message": "You are logged in as user \"{{username}}\"."
     },

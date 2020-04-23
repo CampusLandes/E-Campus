@@ -1,7 +1,11 @@
 {
   "home": {
-    "title": "Bienvenue, Java Hipster !",
-    "subtitle": "Ceci est votre page d'accueil",
+    "title": "Bienvenue sur E-Campus",
+    "DaysLeft": " jours restant",
+    "subtitle": {
+      "login": "Voici les 10 prochains évènements auxquels vous participez",
+      "logout": "Voici les 10 prochains évènements publics"
+    },
     "logged": {
       "message": "Vous êtes connecté en tant que \"{{username}}\"."
     },
