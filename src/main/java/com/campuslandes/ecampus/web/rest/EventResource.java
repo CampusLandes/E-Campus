@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -248,14 +249,15 @@ public class EventResource {
     public ResponseEntity<List<EventDTO>> get10LastEventsPrivate() {
         log.debug("REST request to get a page of Events");
         User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
-        List<Event> events = eventRepository.findAllPublic();
-        List<Event> eventsPrivate = eventRepository.findAllPrivate();
-        events.addAll(eventsPrivate.stream().filter(event -> event.getParticipants().contains(user))
-                .collect(Collectors.toList()));
+        List<Event> events = eventRepository.findAllPublicAndCompletionDateExist();
+        List<Event> eventsPrivate = eventRepository.findAllPrivateAndCompletionDateExist();
+        events.addAll(eventsPrivate.stream()
+        .filter(event -> event.getParticipants().contains(user) || event.getResponsible().equals(user))
+        .collect(Collectors.toList()));
         Collections.sort(events, new Comparator<Event>() {
             @Override
             public int compare(Event u1, Event u2) {
-                return u1.getCompletionDate().compareTo(u2.getCompletionDate());
+                return u1.getCompletionDate().compareTo(u2.getCompletionDate()); 
             }
         });
         List<EventDTO> eventDTOs = new ArrayList<>();
@@ -270,6 +272,85 @@ public class EventResource {
         }
         return ResponseEntity.ok().body(eventDTOs);
     }
+
+
+        /**
+     * {@code GET  /events} : get all the events.
+     *
+     *
+     * @param pageable  the pagination information.
+     * @param eagerload flag to eager load entities from relationships (This is
+     *                  applicable for many-to-many).
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
+     *         of events in body.
+     */
+    @GetMapping("/events/publicAndPrivateWhereUser")
+    public ResponseEntity<List<EventDTO>> publicAndPrivateWhereUser(Pageable pageable,
+            @RequestParam(required = false, defaultValue = "false") boolean eagerload) {
+        log.debug("REST request to get a page of Events");
+        // On initialise la page de retour
+        Page<EventDTO> page;
+        // On recupère le user connecté
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
+        // On recupère les listes de tous les events
+        List<Event> events = eventRepository.findAllPublic();
+        List<Event> eventsPrivate = eventRepository.findAllPrivate();
+        // On ajoute à la liste des events public les events privé dont le user fait parti
+        events.addAll(eventsPrivate.stream()
+        .filter(event -> event.getParticipants().contains(user) || event.getResponsible().equals(user))
+        .collect(Collectors.toList()));
+        // On tri la,liste des events en fonction de leur datede creation
+        Collections.sort(events, new Comparator<Event>() {
+            @Override
+            public int compare(Event u1, Event u2) {
+                return u1.getCreatedDate().compareTo(u2.getCreatedDate()); 
+            }
+        });
+        // On transforme la totalité de nos events en DTO pour pouvoir les utiliser plus facilement pour le frontEnd
+        List<EventDTO> eventDTOs = new ArrayList<>();
+        for (Event event : events) {
+            event.getResponsible().setAuthorities(new HashSet<>());
+            for (User usertmp : event.getParticipants()) {
+                usertmp.setAuthorities(new HashSet<>());
+            }
+            eventDTOs.add(eventMapper.toDto(event));
+        }
+        // On récupère les params de pagination
+        int size = pageable.getPageSize();
+        int pageNumber = pageable.getPageNumber();
+        int posDeb = size * pageNumber;
+        int posFin = size * pageNumber+1;
+        // On s'assure de ne pas avoir d'erreur lorq de la récupération des données
+        if (posFin>events.size()) {
+            posFin = events.size();
+        }
+        if (posDeb>events.size()) {
+            page = new PageImpl<EventDTO>(new ArrayList<>());
+        } else {
+            // On initialise la page avec les données voulues
+            page = new PageImpl<EventDTO>(eventDTOs.subList(posDeb, posFin));
+            
+        }
+        // Permet de faire le retour avec un header custom
+        HttpHeaders headers = PaginationUtil
+                .generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * {@code GET  /events/:id} : get the "id" event.

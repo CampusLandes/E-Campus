@@ -23,9 +23,10 @@
             <a>{{ event.participants.login}}</a>
           </div>
 
-          <div nz-col nzSpan="6">
-            <a >
-              <img class="imageEvent" style="width: 100%; border-radius: 5px;" alt="logo" src="{{getImageUrl(event.responsibleLogin,event.imageUrl)}}" />
+          <div nz-col nzSpan="6" style="text-align: end;">
+            <a>
+              <img class="imageEvent" style="max-width: 150px; max-height: 150px; border-radius: 5px;" alt="logo"
+                src="{{getImageUrl(event.responsibleLogin,event.imageUrl)}}" />
             </a>
           </div>
         </div>
@@ -41,13 +42,25 @@
             <i nz-icon nzType="like-o" style="margin-right: 8px;"></i>
             <a style="margin-right: 8px;">69</a>
           </div> -->
-
-          <div class="editeurEvent" nz-col [nzSpan]="24">
-            <p> 
-              Crée le <strong>{{ event.createdDate | date:'medium'  }}</strong> par <strong>{{ event.createdBy }}</strong> --- Dernière
-              modification le <strong>{{ event.lastModifiedDate | date:'medium' }}</strong>
-              par <strong>{{ event.lastModifiedBy }}</strong>
-            </p>
+          <div nz-col [nzSpan]="12">
+            <nz-button-group>
+              <button nz-button nzType="default">Détails</button><button *ngIf="isResonsable(event)" nz-button nzType="default">Editer</button><button nz-button *ngIf="isResonsable(event)&&isPrivate(event)" nzType="default">Participants</button><button nz-button *ngIf="isResonsable(event) && isPrivate(event)" nzType="default">Inviter</button>
+            </nz-button-group>
+          </div>
+ 
+          <div class="editeurEvent" nz-col [nzSpan]="12">
+            <div>
+              <p>
+                Crée le <strong>{{ event.createdDate | date:'medium'  }}</strong> par
+                <strong>{{ event.createdBy }}</strong>
+              </p>
+            </div>
+            <div>
+              <p>
+                Dernière modification le <strong>{{ event.lastModifiedDate | date:'medium' }}</strong>
+                par <strong>{{ event.lastModifiedBy }}</strong>
+              </p>
+            </div>
           </div>
         </div>
 

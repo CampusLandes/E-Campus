@@ -1,4 +1,4 @@
 export const enum EventStatus {
-  PRIVATE,
-  PUBLIC
+  PRIVATE = 'PRIVATE',
+  PUBLIC = 'PUBLIC'
 }

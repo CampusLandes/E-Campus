@@ -1,3 +1,4 @@
+import { EventStatus } from 'app/shared/model/enumerations/event-status.model';
 import { EventService } from 'app/entities/event/event.service';
 import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
 import { IEvent, Event } from './../shared/model/event.model';
@@ -5,6 +6,10 @@ import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, Subscription, Observable } from 'rxjs';
 import { SERVER_API_URL } from 'app/app.constants';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
+import { IUser, User } from 'app/core/user/user.model';
+import { UserService } from 'app/core/user/user.service';
+import { Account } from 'app/core/user/account.model';
+import { AccountService } from 'app/core/auth/account.service';
 
 class MyDataSource extends DataSource<Event> {
   private length = 10;
@@ -48,20 +53,17 @@ class MyDataSource extends DataSource<Event> {
     this.fetchedPages.add(pageNumber);
 
     this.eventService
-      .query({
+      .queryPublicAndPrivateEventWhereUserIsIn({
+        // .query({
         page: pageNumber,
         size: this.pageSize,
-        sort: ['completionDate,desc']
+        sort: ['title,desc']
       })
       .subscribe(
         (res: HttpResponse<Event[]>) => this.onSuccess(res.body, res.headers, pageNumber),
         () => this.onError()
       );
   }
-
-  // sort(): string[] {
-  //   return ["completionDate,desc"];
-  // }
 
   protected onSuccess(data: any | null, headers: HttpHeaders, page: number): void {
     this.cachedData.splice(page * this.pageSize, this.pageSize, ...data);
@@ -88,11 +90,38 @@ export class EventPageComponent implements OnInit {
 
   public resourceUrl = SERVER_API_URL + 'api/events';
 
-  constructor(private http: HttpClient, private eventService: EventService) {}
+  currentUser: IUser = new User();
+  account!: Account;
 
-  ngOnInit(): void {}
+  constructor(
+    private http: HttpClient,
+    protected userService: UserService,
+    protected accountService: AccountService,
+    private eventService: EventService
+  ) {}
 
-  private getImageUrl(uploaderLogin: String, imageName: String): any {
+  ngOnInit(): void {
+    this.accountService.identity(true).subscribe(account => {
+      if (account) {
+        this.account = account;
+        this.userService.find(this.account.login).subscribe(resBody => {
+          if (resBody) {
+            this.currentUser = resBody;
+          }
+        });
+      }
+    });
+  }
+
+  public getImageUrl(uploaderLogin: String, imageName: String): any {
     return this.resourceUrl + `/image/` + uploaderLogin + `:` + imageName;
+  }
+
+  public isResonsable(event: Event): Boolean {
+    return event.responsibleId === this.currentUser.id;
+  }
+
+  public isPrivate(event: Event): Boolean {
+    return event.status === EventStatus.PRIVATE;
   }
 }
