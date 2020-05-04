@@ -9,6 +9,7 @@ import { EventService } from 'app/entities/event/event.service';
 import { HttpResponse } from '@angular/common/http';
 import * as moment from 'moment';
 import { SERVER_API_URL } from 'app/app.constants';
+import { JhiEventManager } from 'ng-jhipster';
 
 @Component({
   selector: 'jhi-home',
@@ -20,27 +21,44 @@ export class HomeComponent implements OnInit, OnDestroy {
   account: Account | null = null;
   authSubscription?: Subscription;
   publicEventSubscription?: Subscription;
+  publicAndPrivateEventSubscription?: Subscription;
   loadingPublic = false;
   publicEvent: IEvent[];
+  publicAndPrivateEvent: IEvent[];
+  userLoginStatutChangeSubscription?: Subscription;
 
-  constructor(private accountService: AccountService, private loginModalService: LoginModalService, private eventService: EventService) {
+  constructor(
+    private accountService: AccountService,
+    private loginModalService: LoginModalService,
+    private eventService: EventService,
+    private eventManager: JhiEventManager
+  ) {
     this.publicEvent = [];
+    this.publicAndPrivateEvent = [];
   }
 
   ngOnInit(): void {
     this.authSubscription = this.accountService.getAuthenticationState().subscribe(account => (this.account = account));
-    this.publicEventSubscription = this.eventService.find10RecentPublicEvent().subscribe(
-      (res: HttpResponse<IEvent[]>) => (this.publicEvent = res.body ? res.body : []),
-      () => {}
-    );
+    this.userLoginStatutChangeSubscription = this.eventManager.subscribe('UserLoginStatusChange', () => this.loadEvent());
+    this.loadEvent();
+  }
+
+  loadEvent(): void {
+    if (this.accountService.isAuthenticated()) {
+      this.publicAndPrivateEventSubscription = this.eventService.find10RecentPublicAndPrivateEvent().subscribe(
+        (res: HttpResponse<IEvent[]>) => (this.publicAndPrivateEvent = res.body ? res.body : []),
+        () => {}
+      );
+    } else {
+      this.publicEventSubscription = this.eventService.find10RecentPublicEvent().subscribe(
+        (res: HttpResponse<IEvent[]>) => (this.publicEvent = res.body ? res.body : []),
+        () => {}
+      );
+    }
   }
 
   isAuthenticated(): boolean {
     return this.accountService.isAuthenticated();
-  }
-
-  login(): void {
-    this.loginModalService.open();
   }
 
   ngOnDestroy(): void {
@@ -49,6 +67,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
     if (this.publicEventSubscription) {
       this.publicEventSubscription.unsubscribe();
+    }
+    if (this.userLoginStatutChangeSubscription) {
+      this.userLoginStatutChangeSubscription.unsubscribe();
+    }
+    if (this.publicAndPrivateEventSubscription) {
+      this.publicAndPrivateEventSubscription.unsubscribe();
     }
   }
 

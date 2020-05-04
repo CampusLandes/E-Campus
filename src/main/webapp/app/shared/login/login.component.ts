@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { LoginService } from 'app/core/login/login.service';
+import { JhiEventManager } from 'ng-jhipster';
 
 @Component({
   selector: 'jhi-login-modal',
@@ -24,7 +25,8 @@ export class LoginModalComponent implements AfterViewInit {
     private renderer: Renderer,
     private router: Router,
     public activeModal: NgbActiveModal,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private eventManager: JhiEventManager
   ) {}
 
   ngAfterViewInit(): void {
@@ -52,6 +54,7 @@ export class LoginModalComponent implements AfterViewInit {
       .subscribe(
         () => {
           this.authenticationError = false;
+          this.eventManager.broadcast('UserLoginStatusChange');
           this.activeModal.close();
           if (
             this.router.url === '/account/register' ||
