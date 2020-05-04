@@ -54,7 +54,7 @@ class MyDataSource extends DataSource<Event> {
         sort: ['completionDate,desc']
       })
       .subscribe(
-        (res: HttpResponse<Event[]>) => this.onSuccess(res, res.body, res.headers, pageNumber),
+        (res: HttpResponse<Event[]>) => this.onSuccess(res.body, res.headers, pageNumber),
         () => this.onError()
       );
   }
@@ -63,8 +63,8 @@ class MyDataSource extends DataSource<Event> {
   //   return ["completionDate,desc"];
   // }
 
-  protected onSuccess(res: any, data: Event[] | null, headers: HttpHeaders, page: number): void {
-    this.cachedData.splice(page * this.pageSize, this.pageSize, res);
+  protected onSuccess(data: any | null, headers: HttpHeaders, page: number): void {
+    this.cachedData.splice(page * this.pageSize, this.pageSize, ...data);
     this.dataStream.next(this.cachedData);
   }
 
