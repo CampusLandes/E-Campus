@@ -43,6 +43,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -72,7 +73,8 @@ public class EventResource {
 
     private final EventMapper eventMapper;
 
-    public EventResource(EventService eventService, EventRepository eventRepository, EventMapper eventMapper, UserRepository userRepository) {
+    public EventResource(EventService eventService, EventRepository eventRepository, EventMapper eventMapper,
+            UserRepository userRepository) {
         this.eventService = eventService;
         this.eventRepository = eventRepository;
         this.eventMapper = eventMapper;
@@ -210,13 +212,11 @@ public class EventResource {
                 initialFile = new File(UPLOADED_FOLDER + fileNameSplit[0] + "/" + fileNameSplit[1]);
                 in = new FileInputStream(initialFile);
             } catch (Exception e) {
-                //TODO: handle exception
-                in = getClass()
-            .getResourceAsStream("resources/NoImage.png");
+                // TODO: handle exception
+                in = getClass().getResourceAsStream("resources/NoImage.png");
             }
-        }else {
-            in = getClass()
-            .getResourceAsStream("resources/NoImage.png");
+        } else {
+            in = getClass().getResourceAsStream("resources/NoImage.png");
         }
         return IOUtils.toByteArray(in);
     }
@@ -228,12 +228,16 @@ public class EventResource {
         Collections.sort(events, new Comparator<Event>() {
             @Override
             public int compare(Event u1, Event u2) {
-              return u1.getCompletionDate().compareTo(u2.getCompletionDate());
+                return u1.getCompletionDate().compareTo(u2.getCompletionDate());
             }
-          });
+        });
         List<EventDTO> eventDTOs = new ArrayList<>();
-        for (int i = 0; i < events.size() && i < 10; i++)  {
-            if (events.get(i).getCompletionDate().isAfter(Instant.now())){
+        for (int i = 0; i < events.size() && i < 10; i++) {
+            if (events.get(i).getCompletionDate().isAfter(Instant.now())) {
+                events.get(i).getResponsible().setAuthorities(new HashSet<>());
+                for (User usertmp : events.get(i).getParticipants()) {
+                    usertmp.setAuthorities(new HashSet<>());
+                }
                 eventDTOs.add(eventMapper.toDto(events.get(i)));
             }
         }
@@ -246,16 +250,21 @@ public class EventResource {
         User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
         List<Event> events = eventRepository.findAllPublic();
         List<Event> eventsPrivate = eventRepository.findAllPrivate();
-        events.addAll(eventsPrivate.stream().filter(event -> event.getParticipants().contains(user)).collect(Collectors.toList()));
+        events.addAll(eventsPrivate.stream().filter(event -> event.getParticipants().contains(user))
+                .collect(Collectors.toList()));
         Collections.sort(events, new Comparator<Event>() {
             @Override
             public int compare(Event u1, Event u2) {
-              return u1.getCompletionDate().compareTo(u2.getCompletionDate());
+                return u1.getCompletionDate().compareTo(u2.getCompletionDate());
             }
-          });
+        });
         List<EventDTO> eventDTOs = new ArrayList<>();
-        for (int i = 0; i < events.size() && i < 10; i++)  {
-            if (events.get(i).getCompletionDate().isAfter(Instant.now())){
+        for (int i = 0; i < events.size() && i < 10; i++) {
+            if (events.get(i).getCompletionDate().isAfter(Instant.now())) {
+                events.get(i).getResponsible().setAuthorities(new HashSet<>());
+                for (User usertmp : events.get(i).getParticipants()) {
+                    usertmp.setAuthorities(new HashSet<>());
+                }
                 eventDTOs.add(eventMapper.toDto(events.get(i)));
             }
         }
@@ -266,7 +275,8 @@ public class EventResource {
      * {@code GET  /events/:id} : get the "id" event.
      *
      * @param id the id of the eventDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the eventDTO, or with status {@code 404 (Not Found)}.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the eventDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/events/{id}")
     public ResponseEntity<EventDTO> getEvent(@PathVariable Long id) {
@@ -285,6 +295,8 @@ public class EventResource {
     public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
         log.debug("REST request to delete Event : {}", id);
         eventService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+        return ResponseEntity.noContent()
+                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+                .build();
     }
 }

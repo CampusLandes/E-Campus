@@ -39,18 +39,19 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.authSubscription = this.accountService.getAuthenticationState().subscribe(account => (this.account = account));
-    this.publicEventSubscription = this.eventService.find10RecentPublicEvent().subscribe(
-      (res: HttpResponse<IEvent[]>) => (this.publicEvent = res.body ? res.body : []),
-      () => {}
-    );
-    this.userLoginStatutChangeSubscription = this.eventManager.subscribe('UserLoginStatusChange', () => this.loadEventConnected());
-    this.loadEventConnected();
+    this.userLoginStatutChangeSubscription = this.eventManager.subscribe('UserLoginStatusChange', () => this.loadEvent());
+    this.loadEvent();
   }
 
-  loadEventConnected(): void {
+  loadEvent(): void {
     if (this.accountService.isAuthenticated()) {
       this.publicAndPrivateEventSubscription = this.eventService.find10RecentPublicAndPrivateEvent().subscribe(
         (res: HttpResponse<IEvent[]>) => (this.publicAndPrivateEvent = res.body ? res.body : []),
+        () => {}
+      );
+    } else {
+      this.publicEventSubscription = this.eventService.find10RecentPublicEvent().subscribe(
+        (res: HttpResponse<IEvent[]>) => (this.publicEvent = res.body ? res.body : []),
         () => {}
       );
     }
