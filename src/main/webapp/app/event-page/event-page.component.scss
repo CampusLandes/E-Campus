@@ -15,14 +15,28 @@
 }
 
 .demo-infinite-container {
-  height: 100vh;
+  height: 75vh;
   border: 1px solid #e8e8e8;
   border-radius: 4px;
   overflow-y: auto;
 }
 
+.variableDate {
+  font-weight: bolder;
+}
+
+.variableEditor {
+  font-weight: bolder;
+}
+
 .imageEvent {
-  max-width: 500px;
+  max-width: 150px;
+  max-height: 150px;
+  border-radius: 5px;
+}
+
+.divImageEvent {
+  text-align: end;
 }
 
 .editeurEvent {
@@ -31,4 +45,16 @@
 
 nz-list {
   padding: 24px;
+}
+
+.title {
+  font-weight: bolder;
+}
+
+.eventTitle {
+  font-weight: bolder;
+}
+
+p {
+  margin: 0px;
 }

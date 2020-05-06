@@ -11,7 +11,7 @@
         <div [ngSwitch]="isAuthenticated()">
             <div *ngSwitchCase="true">
                 <p class="lead" jhiTranslate="home.subtitle.login">This is your homepage</p>
-                <nz-list [nzDataSource]="publicAndPrivateEvent" [nzRenderItem]="item" [nzItemLayout]="'horizontal'"
+                <nz-list class="list" [nzDataSource]="publicAndPrivateEvent" [nzRenderItem]="item" [nzItemLayout]="'horizontal'"
                 [nzLoading]="loadingPublic">
                 <ng-template #item let-item>
                     <nz-list-item [nzContent]="nzContent">
@@ -33,7 +33,7 @@
 
             <div *ngSwitchCase="false">
                 <p class="lead" jhiTranslate="home.subtitle.logout">This is your homepage</p>
-                <nz-list [nzDataSource]="publicEvent" [nzRenderItem]="item" [nzItemLayout]="'horizontal'"
+                <nz-list class="list" [nzDataSource]="publicEvent" [nzRenderItem]="item" [nzItemLayout]="'horizontal'"
                     [nzLoading]="loadingPublic">
                     <ng-template #item let-item>
                         <nz-list-item [nzContent]="nzContent">

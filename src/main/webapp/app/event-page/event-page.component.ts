@@ -23,6 +23,14 @@ class MyDataSource extends DataSource<Event> {
 
   constructor(private http: HttpClient, private eventService: EventService) {
     super();
+    // eslint-disable-next-line no-console
+    console.log('-_-_-_-_-__-___-_-_-_-_-_-_-_-_-_-_-__-_-_-_');
+    // eslint-disable-next-line no-console
+    console.log(this.cachedData);
+    // eslint-disable-next-line no-console
+    console.log(this.dataStream);
+    // eslint-disable-next-line no-console
+    console.log('-_-_-_-_-__-___-_-_-_-_-_-_-_-_-_-_-__-_-_-_');
   }
 
   connect(collectionViewer: CollectionViewer): Observable<IEvent[]> {

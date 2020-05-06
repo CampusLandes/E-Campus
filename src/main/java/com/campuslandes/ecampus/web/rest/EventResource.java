@@ -319,7 +319,7 @@ public class EventResource {
         int size = pageable.getPageSize();
         int pageNumber = pageable.getPageNumber();
         int posDeb = size * pageNumber;
-        int posFin = size * pageNumber+1;
+        int posFin = size * (pageNumber+1);
         // On s'assure de ne pas avoir d'erreur lorq de la récupération des données
         if (posFin>events.size()) {
             posFin = events.size();

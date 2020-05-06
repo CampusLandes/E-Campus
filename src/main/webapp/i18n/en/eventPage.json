@@ -1,8 +1,18 @@
 {
   "eCampusApp": {
     "eventPage": {
-      "title": "Events's Page",
-      "listEvent": {}
+      "title": "Events",
+      "listEvent": {},
+      "createdAt": "Created on ",
+      "createdBy": " by ",
+      "modifiedAt": "Last modification on ",
+      "modifiedBy": " by ",
+      "button": {
+        "invit": "Invit",
+        "participants": "Participants",
+        "edit": "Edit",
+        "details": "Details"
+      }
     }
   }
 }
