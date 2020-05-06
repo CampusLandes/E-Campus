@@ -1,0 +1,17 @@
+<nz-tabset [nzSelectedIndex]="getRow()">
+    <nz-tab [nzTitle]="title1">
+        <p>{{value.id}}</p>
+        <p>{{type}}</p>
+        <p>{{user}}</p>
+    </nz-tab>
+    <ng-template #title1>
+        <span jhiTranslate="eCampusApp.eventPage.button.details">Detail</span>
+    </ng-template>
+    <nz-tab [nzTitle]="title2">
+      Content of Tab Pane 2
+    </nz-tab>
+    <ng-template #title2>
+        <span jhiTranslate="eCampusApp.eventPage.button.edit">Edit</span>
+    </ng-template>
+</nz-tabset>
+

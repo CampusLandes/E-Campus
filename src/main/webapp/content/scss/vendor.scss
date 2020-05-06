@@ -9,7 +9,9 @@ eg $input-color: red;
 @import '~ng-zorro-antd/button/style/index.min.css';
 @import '~ng-zorro-antd/list/style/index.min.css';
 @import '~ng-zorro-antd/avatar/style/index.min.css';
+@import '~ng-zorro-antd/drawer/style/index.min.css';
 @import '~bootswatch/dist/materia/variables';
+@import '~ng-zorro-antd/src/ng-zorro-antd.min.css';
 // Override Bootstrap variables
 @import 'bootstrap-variables';
 // Import Bootstrap source files from node_modules

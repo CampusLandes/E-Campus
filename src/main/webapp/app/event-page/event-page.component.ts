@@ -10,6 +10,8 @@ import { IUser, User } from 'app/core/user/user.model';
 import { UserService } from 'app/core/user/user.service';
 import { Account } from 'app/core/user/account.model';
 import { AccountService } from 'app/core/auth/account.service';
+import { DrawerComponent } from './drawer/drawer.component';
+import { NzDrawerService } from 'ng-zorro-antd';
 
 class MyDataSource extends DataSource<Event> {
   private length = 10;
@@ -23,14 +25,6 @@ class MyDataSource extends DataSource<Event> {
 
   constructor(private http: HttpClient, private eventService: EventService) {
     super();
-    // eslint-disable-next-line no-console
-    console.log('-_-_-_-_-__-___-_-_-_-_-_-_-_-_-_-_-__-_-_-_');
-    // eslint-disable-next-line no-console
-    console.log(this.cachedData);
-    // eslint-disable-next-line no-console
-    console.log(this.dataStream);
-    // eslint-disable-next-line no-console
-    console.log('-_-_-_-_-__-___-_-_-_-_-_-_-_-_-_-_-__-_-_-_');
   }
 
   connect(collectionViewer: CollectionViewer): Observable<IEvent[]> {
@@ -105,6 +99,7 @@ export class EventPageComponent implements OnInit {
     private http: HttpClient,
     protected userService: UserService,
     protected accountService: AccountService,
+    private drawerService: NzDrawerService,
     private eventService: EventService
   ) {}
 
@@ -118,6 +113,29 @@ export class EventPageComponent implements OnInit {
           }
         });
       }
+    });
+  }
+
+  openComponent(event: Event, stringType: String, responsibleId: User): void {
+    const drawerRef = this.drawerService.create<DrawerComponent, { value: Event; type: String; user: User }>({
+      nzTitle: 'Component',
+      nzContent: DrawerComponent,
+      nzWidth: '17vw',
+      nzContentParams: {
+        value: event,
+        type: stringType,
+        user: responsibleId
+      }
+    });
+
+    drawerRef.afterOpen.subscribe(() => {
+      // eslint-disable-next-line no-console
+      console.log('Drawer(Component) open');
+    });
+
+    drawerRef.afterClose.subscribe(data => {
+      // eslint-disable-next-line no-console
+      console.log('Drawer(Component) close');
     });
   }
 

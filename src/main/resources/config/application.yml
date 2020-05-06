@@ -88,8 +88,8 @@ spring:
     enabled: false
   servlet:
     multipart:
-      max-file-size: 128MB
-      max-request-size: 128MB
+      max-file-size: 1MB
+      max-request-size: 1MB
   data:
     jpa:
       repositories:

@@ -30,7 +30,7 @@
           <hr>
 
           <div nz-row>
-            <!-- 
+            <!--
               Affichage des icons favoris commentaire ect
               <div nz-col [nzSpan]="12">
             <i nz-icon nzType="star-o" style="margin-right: 8px;"></i>
@@ -43,10 +43,10 @@
             <div nz-col [nzSpan]="12">
               <nz-button-group>
                 <button jhiTranslate="eCampusApp.eventPage.button.details" nz-button
-                  nzType="default">Détails</button><button *ngIf="isResonsable(event)"
-                  jhiTranslate="eCampusApp.eventPage.button.edit" nz-button nzType="default">Editer</button><button
+                  nzType="default" (click)="openComponent(event, 'see', currentUser.id)">Détails</button><button *ngIf="isResonsable(event)"
+                  jhiTranslate="eCampusApp.eventPage.button.edit" nz-button nzType="default" (click)="openComponent(event, 'edit')">Editer</button><button
                   jhiTranslate="eCampusApp.eventPage.button.participants" nz-button
-                  *ngIf="isResonsable(event)&&isPrivate(event)" nzType="default">Participants</button><button
+                  *ngIf="isResonsable(event)&&isPrivate(event)" nzType="default" >Participants</button><button
                   jhiTranslate="eCampusApp.eventPage.button.invit" nz-button
                   *ngIf="isResonsable(event) && isPrivate(event)" nzType="default">Inviter</button>
               </nz-button-group>

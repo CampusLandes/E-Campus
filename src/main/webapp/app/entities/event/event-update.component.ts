@@ -80,7 +80,7 @@ export class EventUpdateComponent implements OnInit {
       url: this.resourceUrl,
       isHTML5: true,
       allowedFileType: ['image'],
-      maxFileSize: 5 * 1024 * 1024,
+      maxFileSize: 1 * 1024 * 1024,
       authTokenHeader: 'Authorization',
       authToken: 'Bearer ' + this.authServerProvider.getToken()
     });
