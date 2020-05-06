@@ -1,3 +1,4 @@
+import { EventPageModule } from './event-page/event-page.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -23,6 +24,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ECampusSharedModule,
     ECampusCoreModule,
     ECampusHomeModule,
+    EventPageModule,
     // jhipster-needle-angular-add-module JHipster will add new module here
     ECampusEntityModule,
     ECampusAppRoutingModule

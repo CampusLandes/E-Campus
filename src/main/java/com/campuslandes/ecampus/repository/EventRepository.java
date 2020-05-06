@@ -29,10 +29,16 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     @Query("select event from Event event left join fetch event.participants where event.id =:id")
     Optional<Event> findOneWithEagerRelationships(@Param("id") Long id);
 
-    @Query("select event from Event event left join fetch event.participants where event.status ='PUBLIC' and event.completionDate is not null")
+    @Query("select distinct event from Event event left join fetch event.participants where event.status ='PUBLIC' and event.completionDate is not null")
+    List<Event> findAllPublicAndCompletionDateExist();
+
+    @Query("select distinct event from Event event left join fetch event.participants where event.status ='PRIVATE' and event.completionDate is not null")
+    List<Event> findAllPrivateAndCompletionDateExist();
+    
+    @Query("select distinct event from Event event left join fetch event.participants where event.status ='PUBLIC'")
     List<Event> findAllPublic();
 
-    @Query("select event from Event event left join fetch event.participants where event.status ='PRIVATE' and event.completionDate is not null")
+    @Query("select distinct event from Event event left join fetch event.participants where event.status ='PRIVATE'")
 	List<Event> findAllPrivate();
 
 }

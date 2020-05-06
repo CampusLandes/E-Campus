@@ -1,0 +1,60 @@
+.itemList {
+  border-bottom: 3px solid #777777 !important;
+  margin-bottom: 4vh !important;
+  padding-top: 0px;
+}
+
+.titleBox {
+  border: 2px solid #e8e8e8;
+  border-radius: 4px;
+  padding: 2vh;
+  margin-bottom: 2vh;
+  margin-left: 5vh;
+  margin-right: 5vh;
+  text-align: center;
+}
+
+.demo-infinite-container {
+  height: 75vh;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  overflow-y: auto;
+}
+
+.variableDate {
+  font-weight: bolder;
+}
+
+.variableEditor {
+  font-weight: bolder;
+}
+
+.imageEvent {
+  max-width: 150px;
+  max-height: 150px;
+  border-radius: 5px;
+}
+
+.divImageEvent {
+  text-align: end;
+}
+
+.editeurEvent {
+  text-align: right !important;
+}
+
+nz-list {
+  padding: 24px;
+}
+
+.title {
+  font-weight: bolder;
+}
+
+.eventTitle {
+  font-weight: bolder;
+}
+
+p {
+  margin: 0px;
+}
