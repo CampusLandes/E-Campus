@@ -10,11 +10,13 @@ import com.campuslandes.ecampus.service.dto.UserDTO;
 import com.campuslandes.ecampus.web.rest.errors.BadRequestAlertException;
 import com.campuslandes.ecampus.web.rest.errors.EmailAlreadyUsedException;
 import com.campuslandes.ecampus.web.rest.errors.LoginAlreadyUsedException;
+import com.campuslandes.ecampus.web.rest.utils.uploadFileUtils;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 
+import org.apache.poi.util.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,9 +27,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
@@ -150,6 +156,21 @@ public class UserResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+    @PostMapping("/users/upload/")
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+        log.debug("REST request to upload File");
+        return uploadFileUtils.uploadOneImage(file, "User");
+    }
+
+    @GetMapping("/users/image/{image}")
+    public byte[] getEventsImage(@PathVariable String image) throws IOException {
+        log.debug("REST request to get a page of Events");
+        InputStream in = uploadFileUtils.getOneImage(image, "User");
+        if (in == null) {
+            in = getClass().getResourceAsStream("resources/noImageUser.png");
+        }
+        return IOUtils.toByteArray(in);
+    }
     /**
      * Gets a list of all roles.
      * @return a string list of all roles.

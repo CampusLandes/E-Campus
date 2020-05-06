@@ -1,21 +1,31 @@
 package com.campuslandes.ecampus.web.rest;
 
-import com.campuslandes.ecampus.security.SecurityUtils;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
+
 import com.campuslandes.ecampus.domain.Event;
 import com.campuslandes.ecampus.domain.User;
 import com.campuslandes.ecampus.repository.EventRepository;
 import com.campuslandes.ecampus.repository.UserRepository;
+import com.campuslandes.ecampus.security.SecurityUtils;
 import com.campuslandes.ecampus.service.EventService;
-import com.campuslandes.ecampus.web.rest.errors.BadRequestAlertException;
-import com.campuslandes.ecampus.web.rest.utils.randomUtils;
 import com.campuslandes.ecampus.service.dto.EventDTO;
 import com.campuslandes.ecampus.service.mapper.EventMapper;
+import com.campuslandes.ecampus.web.rest.errors.BadRequestAlertException;
+import com.campuslandes.ecampus.web.rest.utils.uploadFileUtils;
 
-import io.github.jhipster.web.util.HeaderUtil;
-import io.github.jhipster.web.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
-
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.poi.util.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,31 +34,22 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.validation.Valid;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.PaginationUtil;
+import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing {@link com.campuslandes.ecampus.domain.Event}.
@@ -60,8 +61,6 @@ public class EventResource {
     private final Logger log = LoggerFactory.getLogger(EventResource.class);
 
     private static final String ENTITY_NAME = "event";
-
-    private static String UPLOADED_FOLDER = "/Jhipster/file/upload/Event/";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
@@ -155,68 +154,14 @@ public class EventResource {
     @PostMapping("/events/upload/")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
         log.debug("REST request to upload File");
-        String contentType = file.getContentType();
-        if (isNotImage(contentType)) {
-            return ResponseEntity.badRequest().body("BAD TYPE");
-        }
-
-        String name = file.getOriginalFilename();
-        String[] fileNameSplit = name.split(Pattern.quote("."));
-        String fileName = "";
-        if (file.isEmpty()) {
-            return ResponseEntity.badRequest().body("NO FILE");
-        }
-        for (String str : fileNameSplit)
-            fileName += str + ".";
-        name = SecurityUtils.getCurrentUserLogin().get();
-        String shaName = DigestUtils.sha256Hex(fileName) + "." + fileNameSplit[fileNameSplit.length - 1];
-        Path path;
-        int x = 0;
-        do {
-            if (x > 0)
-                shaName = DigestUtils.sha256Hex(fileName + x) + "." + fileNameSplit[fileNameSplit.length - 1];
-            else
-                shaName = DigestUtils.sha256Hex(fileName) + "." + fileNameSplit[fileNameSplit.length - 1];
-            String url = UPLOADED_FOLDER + name + "/" + shaName;
-            path = Paths.get(url);
-            x += randomUtils.getRandomNumberInRange(0, 10000);
-        } while (Files.exists(path));
-        try {
-
-            // Get the file and save it somewhere
-            byte[] bytes = file.getBytes();
-            if (!Files.exists(Paths.get(UPLOADED_FOLDER + name + "/")))
-                Files.createDirectories(Paths.get(UPLOADED_FOLDER + name + "/"));
-            if (!Files.exists(path)) {
-                Files.write(path, bytes);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return ResponseEntity.ok(shaName);
-    }
-
-    private boolean isNotImage(String contentType) {
-        return !contentType.toLowerCase().trim().contains("image");
+        return uploadFileUtils.uploadOneImage(file, "Event");
     }
 
     @GetMapping("/events/image/{image}")
     public byte[] getEventsImage(@PathVariable String image) throws IOException {
         log.debug("REST request to get a page of Events");
-        String[] fileNameSplit = image.split(Pattern.quote(":"));
-        File initialFile = new File("");
-        InputStream in = null;
-        if (fileNameSplit.length >= 2) {
-            try {
-                initialFile = new File(UPLOADED_FOLDER + fileNameSplit[0] + "/" + fileNameSplit[1]);
-                in = new FileInputStream(initialFile);
-            } catch (Exception e) {
-                // TODO: handle exception
-                in = getClass().getResourceAsStream("resources/NoImage.png");
-            }
-        } else {
+        InputStream in = uploadFileUtils.getOneImage(image, "Event");
+        if (in == null) {
             in = getClass().getResourceAsStream("resources/NoImage.png");
         }
         return IOUtils.toByteArray(in);
