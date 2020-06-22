@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { SERVER_API_URL } from 'app/app.constants';
+import { Event } from 'app/shared/model/event.model';
 
 @Component({
   selector: 'jhi-drawer',
@@ -10,9 +12,15 @@ export class DrawerComponent implements OnInit {
   @Input() type: String = '';
   @Input() user: String = '';
 
+  public event: Event = new Event();
+
+  public resourceUrl = SERVER_API_URL + 'api/events';
+
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.event = this.value as Event;
+  }
 
   getRow(): number {
     if (this.type === 'edit') {
@@ -20,5 +28,9 @@ export class DrawerComponent implements OnInit {
     } else {
       return 0;
     }
+  }
+
+  public getImageUrl(uploaderLogin: String, imageName: String): any {
+    return this.resourceUrl + `/image/` + uploaderLogin + `:` + imageName;
   }
 }

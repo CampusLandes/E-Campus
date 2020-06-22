@@ -1,8 +1,22 @@
 <nz-tabset [nzSelectedIndex]="getRow()">
     <nz-tab [nzTitle]="title1">
-        <p>{{value.id}}</p>
+
+
+
+        <nz-descriptions [nzColumn]="4" nzTitle="{{value.title}}">
+        <nz-descriptions-item nzTitle="Description" [nzSpan]="4" word-break=break-word>{{value.desc}}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Date" [nzSpan]="4">{{value.completionDate | date:'medium'}}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Statut" [nzSpan]="4">{{value.status}}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Birthday" [nzSpan]="4">{{value.type}}</nz-descriptions-item>
+
+          Make things as simple as possible but no simpler.
+        </nz-descriptions-item>
+
         <p>{{type}}</p>
         <p>{{user}}</p>
+        <p>
+            <img class="imageEvent" alt="logo" src="{{getImageUrl(value.responsibleLogin,value.imageUrl)}}" />
+        </p>
     </nz-tab>
     <ng-template #title1>
         <span jhiTranslate="eCampusApp.eventPage.button.details">Detail</span>
