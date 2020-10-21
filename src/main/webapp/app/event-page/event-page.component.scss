@@ -33,6 +33,13 @@
   max-width: 150px;
   max-height: 150px;
   border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+}
+
+.imageEvent:hover {
+  border-radius: 15px;
+  opacity: 0.5;
 }
 
 .divImageEvent {

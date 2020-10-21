@@ -4,6 +4,7 @@
       "home": {
         "title": "Events",
         "createLabel": "Create a new Event",
+        "imageLabel": "Import a new image",
         "createOrEditLabel": "Create or edit a Event",
         "notFound": "No Events found"
       },
@@ -17,14 +18,16 @@
         "title": "Event"
       },
       "title": "Title",
-      "desc": "Desc",
+      "desc": "Description",
       "completionDate": "Completion Date",
       "status": "Status",
       "imageUrl": "Image Url",
+      "image": "Image",
       "type": "Type",
       "localisation": "Localisation",
       "responsible": "Responsible",
-      "participants": "Participants"
+      "participants": "Participants",
+      "changeImage": "Change image"
     }
   }
 }

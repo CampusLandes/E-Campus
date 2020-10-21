@@ -4,10 +4,22 @@ import { RouterModule } from '@angular/router';
 import { EVENTPAGE_ROUTE } from './event-page.route';
 import { EventPageComponent } from './event-page.component';
 import { DrawerComponent } from './drawer/drawer.component';
+import { ImportImageComponent } from './drawer/import-image/import-image.component';
+import { FileUploadModule } from 'ng2-file-upload';
+import { TypeAddComponent } from './drawer/type-add/type-add.component';
+import { LocalisationAddComponent } from './drawer/localisation-add/localisation-add.component';
+import { ImageViewerComponent } from './drawer/image-viewer/image-viewer.component';
 
 @NgModule({
-  imports: [ECampusSharedModule, RouterModule.forChild([EVENTPAGE_ROUTE])],
-  declarations: [EventPageComponent, DrawerComponent],
-  entryComponents: [DrawerComponent]
+  imports: [ECampusSharedModule, RouterModule.forChild([EVENTPAGE_ROUTE]), FileUploadModule],
+  declarations: [
+    EventPageComponent,
+    DrawerComponent,
+    ImportImageComponent,
+    TypeAddComponent,
+    LocalisationAddComponent,
+    ImageViewerComponent
+  ],
+  entryComponents: [DrawerComponent, ImportImageComponent, TypeAddComponent, LocalisationAddComponent, ImageViewerComponent]
 })
 export class EventPageModule {}

@@ -1,0 +1,21 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm(validateForm.value)">
+    <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired><span jhiTranslate="eCampusApp.eventType.name">Name</span></nz-form-label>
+        <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="userErrorTpl">
+            <input nz-input formControlName="name" placeholder="BDE" />
+            <ng-template #userErrorTpl let-control>
+                <ng-container *ngIf="control.hasError('required')">
+                    <span jhiTranslate="entity.validation.required">Ce champ est obligatoire !</span>
+                </ng-container>
+            </ng-template>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-control [nzOffset]="7" [nzSpan]="12">
+            <nz-button-group>
+                <button nz-button nzType="primary" [disabled]="!validateForm.valid || isSaving"><span jhiTranslate="entity.action.save">Submit</span>
+                </button><button nz-button nzType="default" (click)="resetForm($event)"><span jhiTranslate="entity.action.cancel">Reset</span></button>
+            </nz-button-group>
+        </nz-form-control>
+    </nz-form-item>
+</form>
