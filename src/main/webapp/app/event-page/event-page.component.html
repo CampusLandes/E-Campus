@@ -1,36 +1,35 @@
 <div>
-  <h4 jhiTranslate="eCampusApp.eventPage.title" class="title">Les événements</h4>
+    <h4 jhiTranslate="eCampusApp.eventPage.title" class="title">Les événements</h4>
 </div>
 
 <cdk-virtual-scroll-viewport itemSize="10" class="demo-infinite-container">
 
-  <nz-list>
-    <nz-list-item [ngClass]="{'itemList': event !== null}" [nzContent]="content" [nzNoFlex]="true"
-      *cdkVirtualFor="let event of ds">
+    <nz-list>
+        <nz-list-item [ngClass]="{'itemList': event !== null}" [nzContent]="content" [nzNoFlex]="true" *cdkVirtualFor="let event of ds">
 
-      <nz-skeleton [nzLoading]="!event" [nzActive]="true" [nzAvatar]="true">
+            <nz-skeleton [nzLoading]="!event" [nzActive]="true" [nzAvatar]="true">
 
-        <ng-template #content>
+                <ng-template #content>
 
-          <div nz-row nzType="flex" nzJustify="space-between">
-            <div nz-col nzSpan="18">
-              <h5 class="eventTitle" [routerLink]="['/event-type', event.typeId , 'view' ]">{{ event.title }}</h5>
-              <br>
-              <p>{{ event.desc }}</p>
-              <p>{{ event.participants.login}}</p>
-            </div>
+                    <div nz-row nzType="flex" nzJustify="space-between">
+                        <div nz-col nzSpan="18">
+                            <h5 class="eventTitle" [routerLink]="['/event-type', event.typeId , 'view' ]">{{ event.title }}</h5>
+                            <br>
+                            <p>{{ event.desc }}</p>
+                            <p>{{ event.participants.login}}</p>
+                        </div>
 
-            <div class="divImageEvent" nz-col nzSpan="6">
-              <p>
-                <img class="imageEvent" alt="logo" src="{{getImageUrl(event.responsibleLogin,event.imageUrl)}}" />
-              </p>
-            </div>
-          </div>
+                        <div class="divImageEvent" nz-col nzSpan="6">
+                            <p>
+                                <img class="imageEvent" alt="logo" src="{{getImageUrl(event.responsibleLogin,event.imageUrl)}}" (click)="showModalImage(event.responsibleLogin,event.imageUrl)" />
+                            </p>
+                        </div>
+                    </div>
 
-          <hr>
+                    <hr>
 
-          <div nz-row>
-            <!-- 
+                    <div nz-row>
+                        <!--
               Affichage des icons favoris commentaire ect
               <div nz-col [nzSpan]="12">
             <i nz-icon nzType="star-o" style="margin-right: 8px;"></i>
@@ -40,52 +39,52 @@
             <i nz-icon nzType="like-o" style="margin-right: 8px;"></i>
             <p style="margin-right: 8px;">69</p>
           </div> -->
-            <div nz-col [nzSpan]="12">
-              <nz-button-group>
-                <button jhiTranslate="eCampusApp.eventPage.button.details" nz-button
-                  nzType="default">Détails</button><button *ngIf="isResonsable(event)"
-                  jhiTranslate="eCampusApp.eventPage.button.edit" nz-button nzType="default">Editer</button><button
-                  jhiTranslate="eCampusApp.eventPage.button.participants" nz-button
-                  *ngIf="isResonsable(event)&&isPrivate(event)" nzType="default">Participants</button><button
-                  jhiTranslate="eCampusApp.eventPage.button.invit" nz-button
-                  *ngIf="isResonsable(event) && isPrivate(event)" nzType="default">Inviter</button>
-              </nz-button-group>
-            </div>
+                        <div nz-col [nzSpan]="12">
+                            <nz-button-group>
+                                <button jhiTranslate="eCampusApp.eventPage.button.details" nz-button nzType="default" (click)="openComponent(event, 'see')">Détails</button><button *ngIf="isResonsable(event)" jhiTranslate="eCampusApp.eventPage.button.edit"
+                                    nz-button nzType="default" (click)="openComponent(event, 'edit')">Editer</button><button jhiTranslate="eCampusApp.eventPage.button.participants" nz-button *ngIf="isResonsable(event)&&isPrivate(event)" nzType="default">Participants
+                                    </button><button jhiTranslate="eCampusApp.eventPage.button.invit" nz-button *ngIf="isResonsable(event) && isPrivate(event)" nzType="default">Inviter</button>
+                            </nz-button-group>
+                        </div>
 
-            <div class="editeurEvent" nz-col [nzSpan]="12">
-              <p>
-                <span jhiTranslate="eCampusApp.eventPage.createdAt">
+                        <div class="editeurEvent" nz-col [nzSpan]="12">
+                            <p>
+                                <span jhiTranslate="eCampusApp.eventPage.createdAt">
                   Crée le
                 </span>
-                <span class="variableDate">
+                                <span class="variableDate">
                   {{ event.createdDate | date:'medium'  }}
                 </span>
-                <span jhiTranslate="eCampusApp.eventPage.createdBy">
+                                <span jhiTranslate="eCampusApp.eventPage.createdBy">
                   par
                 </span>
-                <span class="variableEditor">
+                                <span class="variableEditor">
                   {{ event.createdBy }}
                 </span>
-              </p>
-              <p>
-                <span jhiTranslate="eCampusApp.eventPage.modifiedAt">
+                            </p>
+                            <p>
+                                <span jhiTranslate="eCampusApp.eventPage.modifiedAt">
                   Dernière modification le
                 </span>
-                <span class="variableDate">
+                                <span class="variableDate">
                   {{ event.lastModifiedDate | date:'medium' }}
                 </span>
-                <span jhiTranslate="eCampusApp.eventPage.modifiedBy">
+                                <span jhiTranslate="eCampusApp.eventPage.modifiedBy">
                   par
                 </span>
-                <span class="variableEditor">
+                                <span class="variableEditor">
                   {{ event.lastModifiedBy }}
                 </span>
-              </p>
-            </div>
-          </div>
+                            </p>
+                        </div>
+                    </div>
 
-        </ng-template>
-      </nz-skeleton>
-    </nz-list-item>
-  </nz-list>
+                </ng-template>
+            </nz-skeleton>
+        </nz-list-item>
+    </nz-list>
+    <nz-empty *ngIf="ds.size() == 0" [nzNotFoundFooter]="footerTpl"></nz-empty>
+    <ng-template #footerTpl>
+        <button nz-button nzType="primary" (click)="createEvent()">Create Now</button>
+    </ng-template>
 </cdk-virtual-scroll-viewport>

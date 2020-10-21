@@ -3,7 +3,7 @@
     "localisation": {
       "home": {
         "title": "Localisations",
-        "createLabel": "Créer un nouveau Localisation",
+        "createLabel": "Créer une nouvel localisation",
         "createOrEditLabel": "Créer ou éditer un Localisation",
         "notFound": "Aucun Localisation trouvé"
       },

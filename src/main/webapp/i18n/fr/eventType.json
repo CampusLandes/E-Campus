@@ -3,7 +3,7 @@
     "eventType": {
       "home": {
         "title": "EventTypes",
-        "createLabel": "Créer un nouveau Event Type",
+        "createLabel": "Créer un nouveau type d'évent",
         "createOrEditLabel": "Créer ou éditer un Event Type",
         "notFound": "Aucun Event Type trouvé"
       },

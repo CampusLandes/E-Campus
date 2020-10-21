@@ -10,6 +10,10 @@ import { IUser, User } from 'app/core/user/user.model';
 import { UserService } from 'app/core/user/user.service';
 import { Account } from 'app/core/user/account.model';
 import { AccountService } from 'app/core/auth/account.service';
+import { DrawerComponent } from './drawer/drawer.component';
+import { NzDrawerService, NzModalService } from 'ng-zorro-antd';
+import { JhiEventManager } from 'ng-jhipster';
+import { ImageViewerComponent } from './drawer/image-viewer/image-viewer.component';
 
 class MyDataSource extends DataSource<Event> {
   private length = 10;
@@ -23,14 +27,6 @@ class MyDataSource extends DataSource<Event> {
 
   constructor(private http: HttpClient, private eventService: EventService) {
     super();
-    // eslint-disable-next-line no-console
-    console.log('-_-_-_-_-__-___-_-_-_-_-_-_-_-_-_-_-__-_-_-_');
-    // eslint-disable-next-line no-console
-    console.log(this.cachedData);
-    // eslint-disable-next-line no-console
-    console.log(this.dataStream);
-    // eslint-disable-next-line no-console
-    console.log('-_-_-_-_-__-___-_-_-_-_-_-_-_-_-_-_-__-_-_-_');
   }
 
   connect(collectionViewer: CollectionViewer): Observable<IEvent[]> {
@@ -44,6 +40,10 @@ class MyDataSource extends DataSource<Event> {
       })
     );
     return this.dataStream;
+  }
+
+  size(): number {
+    return this.cachedData.length;
   }
 
   disconnect(): void {
@@ -100,11 +100,15 @@ export class EventPageComponent implements OnInit {
 
   currentUser: IUser = new User();
   account!: Account;
+  eventSubscriber?: Subscription;
 
   constructor(
     private http: HttpClient,
     protected userService: UserService,
+    private modalService: NzModalService,
     protected accountService: AccountService,
+    private drawerService: NzDrawerService,
+    protected eventManager: JhiEventManager,
     private eventService: EventService
   ) {}
 
@@ -118,6 +122,39 @@ export class EventPageComponent implements OnInit {
           }
         });
       }
+    });
+    this.eventSubscriber = this.eventManager.subscribe('eventListModification', () => {
+      this.ds = new MyDataSource(this.http, this.eventService);
+    });
+  }
+
+  public createEvent(): void {}
+
+  openComponent(event: Event, stringType: String): void {
+    this.drawerService.create<DrawerComponent, { value: Event; type: String; isResp: Boolean }>({
+      nzContent: DrawerComponent,
+      nzWidth: '30vw',
+      nzContentParams: {
+        value: event,
+        type: stringType,
+        isResp: this.isResonsable(event)
+      },
+      nzMaskClosable: false
+    });
+  }
+
+  showModalImage(uploaderLogin: String, imageName: String): void {
+    this.modalService.create({
+      nzContent: ImageViewerComponent,
+      nzWidth: '95vw',
+      nzComponentParams: {
+        resp: uploaderLogin,
+        url: imageName
+      },
+      nzStyle: {
+        top: '2vh'
+      },
+      nzFooter: null
     });
   }
 

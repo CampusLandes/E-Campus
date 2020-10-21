@@ -2,29 +2,32 @@
   "eCampusApp": {
     "event": {
       "home": {
-        "title": "Events",
-        "createLabel": "Créer un nouveau Event",
-        "createOrEditLabel": "Créer ou éditer un Event",
-        "notFound": "Aucun Event trouvé"
+        "title": "Événements",
+        "createLabel": "Créer un nouveau événements",
+        "imageLabel": "Importer une nouvelle image",
+        "createOrEditLabel": "Créer ou éditer un événement",
+        "notFound": "Aucun événement trouvé"
       },
-      "created": "Un nouveau Event a été créé avec l'identifiant {{ param }}",
-      "updated": "Le Event avec l'identifiant {{ param }} a été mis à jour",
-      "deleted": "Le Event avec l'identifiant {{ param }} a été supprimé",
+      "created": "Un nouveau événement a été créé avec l'identifiant {{ param }}",
+      "updated": "L'événement avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "L'événement avec l'identifiant {{ param }} a été supprimé",
       "delete": {
-        "question": "Etes-vous certain de vouloir supprimer le Event {{ id }} ?"
+        "question": "Etes-vous certain de vouloir supprimer l'événement {{ id }} ?"
       },
       "detail": {
-        "title": "Event"
+        "title": "Événement"
       },
-      "title": "Title",
-      "desc": "Desc",
-      "completionDate": "Completion Date",
+      "title": "Titre",
+      "desc": "Description",
+      "completionDate": "Date de réalisation",
       "status": "Status",
-      "imageUrl": "Image Url",
+      "imageUrl": "Url de l'image",
+      "image": "Image",
       "type": "Type",
       "localisation": "Localisation",
-      "responsible": "Responsible",
-      "participants": "Participants"
+      "responsible": "Responsable",
+      "participants": "Participants",
+      "changeImage": "Changer l'image"
     }
   }
 }
