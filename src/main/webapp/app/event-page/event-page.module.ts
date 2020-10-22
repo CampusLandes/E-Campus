@@ -9,6 +9,7 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { TypeAddComponent } from './drawer/type-add/type-add.component';
 import { LocalisationAddComponent } from './drawer/localisation-add/localisation-add.component';
 import { ImageViewerComponent } from './drawer/image-viewer/image-viewer.component';
+import { AddEventComponent } from './drawer/add-event/add-event.component';
 
 @NgModule({
   imports: [ECampusSharedModule, RouterModule.forChild([EVENTPAGE_ROUTE]), FileUploadModule],
@@ -18,8 +19,16 @@ import { ImageViewerComponent } from './drawer/image-viewer/image-viewer.compone
     ImportImageComponent,
     TypeAddComponent,
     LocalisationAddComponent,
-    ImageViewerComponent
+    ImageViewerComponent,
+    AddEventComponent
   ],
-  entryComponents: [DrawerComponent, ImportImageComponent, TypeAddComponent, LocalisationAddComponent, ImageViewerComponent]
+  entryComponents: [
+    DrawerComponent,
+    ImportImageComponent,
+    TypeAddComponent,
+    LocalisationAddComponent,
+    ImageViewerComponent,
+    AddEventComponent
+  ]
 })
 export class EventPageModule {}

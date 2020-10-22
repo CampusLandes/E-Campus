@@ -1,5 +1,15 @@
-<div>
-    <h4 jhiTranslate="eCampusApp.eventPage.title" class="title">Les événements</h4>
+<div nz-row>
+    <div nz-col nzSpan="18">
+        <h4 jhiTranslate="eCampusApp.eventPage.title" class="title">Les événements</h4>
+    </div>
+    <div *ngIf="isBDDorADMINISTRATION()" nz-col nzSpan="6">
+        <button class="float-right" nz-button nzType="primary" (click)="openAddModal()">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span  jhiTranslate="eCampusApp.event.home.createLabel">
+            Create a new Event
+            </span>
+        </button>
+    </div>
 </div>
 
 <cdk-virtual-scroll-viewport itemSize="10" class="demo-infinite-container">
@@ -85,6 +95,11 @@
     </nz-list>
     <nz-empty *ngIf="ds.size() == 0" [nzNotFoundFooter]="footerTpl"></nz-empty>
     <ng-template #footerTpl>
-        <button nz-button nzType="primary" (click)="createEvent()">Create Now</button>
+        <button *ngIf="isBDDorADMINISTRATION()" nz-button nzType="primary" (click)="openAddModal()">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span  jhiTranslate="eCampusApp.event.home.createLabel">
+            Create a new Event
+            </span>
+        </button>
     </ng-template>
 </cdk-virtual-scroll-viewport>

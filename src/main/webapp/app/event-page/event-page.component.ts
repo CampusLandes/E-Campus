@@ -1,3 +1,4 @@
+import { AddEventComponent } from './drawer/add-event/add-event.component';
 import { EventStatus } from 'app/shared/model/enumerations/event-status.model';
 import { EventService } from 'app/entities/event/event.service';
 import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
@@ -128,7 +129,21 @@ export class EventPageComponent implements OnInit {
     });
   }
 
-  public createEvent(): void {}
+  public openAddModal(): void {
+    this.modalService.create({
+      nzTitle: '',
+      nzContent: AddEventComponent,
+      nzWidth: '90vw',
+      nzComponentParams: {
+        user: this.currentUser
+      },
+      nzFooter: null
+    });
+  }
+
+  public isBDDorADMINISTRATION(): boolean {
+    return true;
+  }
 
   openComponent(event: Event, stringType: String): void {
     this.drawerService.create<DrawerComponent, { value: Event; type: String; isResp: Boolean }>({
