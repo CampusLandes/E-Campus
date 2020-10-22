@@ -1,8 +1,9 @@
+import { Localisation } from './../../shared/model/localisation.model';
 import { LocalisationAddComponent } from './localisation-add/localisation-add.component';
 import { TypeAddComponent } from './type-add/type-add.component';
 import { ImportImageComponent } from './import-image/import-image.component';
 import { User } from 'app/core/user/user.model';
-import { HttpResponse } from '@angular/common/http';
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SERVER_API_URL } from 'app/app.constants';
@@ -18,7 +19,7 @@ import { DATE_FORMAT, DATE_TIME_FORMAT } from 'app/shared/constants/input.consta
 import * as moment from 'moment';
 import { LocalisationService } from 'app/entities/localisation/localisation.service';
 import { ILocalisation } from 'app/shared/model/localisation.model';
-import { JhiEventManager } from 'ng-jhipster';
+import { JhiAlertService, JhiEventManager } from 'ng-jhipster';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -40,6 +41,9 @@ export class DrawerComponent implements OnInit {
   eventtypes: IEventType[] = [];
 
   localisations: ILocalisation[] = [];
+  localisation: ILocalisation = new Localisation();
+  isEvent = true;
+  isLocalisation = true;
 
   private localisationTitle = '';
   private eventTypeTitle = '';
@@ -58,7 +62,8 @@ export class DrawerComponent implements OnInit {
     protected localisationService: LocalisationService,
     protected eventTypeService: EventTypeService,
     private drawerRef: NzDrawerRef<string>,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private alertService: JhiAlertService
   ) {
     this.validateForm = this.fb.group({
       title: ['', [Validators.required]],
@@ -66,7 +71,7 @@ export class DrawerComponent implements OnInit {
       date: [''],
       status: ['', [Validators.required]],
       type: ['', [Validators.required]],
-      image: ['', [Validators.required]],
+      image: [''],
       localisation: ['', [Validators.required]]
     });
     this.responsible = new User();
@@ -94,7 +99,15 @@ export class DrawerComponent implements OnInit {
           return res.body ? res.body : [];
         })
       )
-      .subscribe((resBody: ILocalisation[]) => (this.localisations = resBody));
+      .subscribe((resBody: ILocalisation[]) => {
+        this.localisations = resBody;
+        this.isLocalisation = false;
+        if (this.event.localisationId) {
+          const id: number = this.event.localisationId;
+          this.localisation = this.localisations.find(i => i.id === this.event.localisationId) as ILocalisation;
+        }
+      });
+
     this.eventTypeService
       .query()
       .pipe(
@@ -102,7 +115,10 @@ export class DrawerComponent implements OnInit {
           return res.body ? res.body : [];
         })
       )
-      .subscribe((resBody: IEventType[]) => (this.eventtypes = resBody));
+      .subscribe((resBody: IEventType[]) => {
+        this.eventtypes = resBody;
+        this.isEvent = false;
+      });
     this.userService.find(this.event.responsibleLogin ? this.event.responsibleLogin : '').subscribe(resBody => {
       if (resBody) {
         this.responsible = resBody;
@@ -139,6 +155,14 @@ export class DrawerComponent implements OnInit {
     }
   }
 
+  getLocalisationName(): string {
+    let text = this.event.localisationName ? this.event.localisationName : '';
+    if (this.localisation) {
+      text = this.localisation.name + ' - ' + this.localisation.localisation;
+    }
+    return text;
+  }
+
   addType(): void {
     const modal = this.modalService.create({
       nzTitle: this.eventTypeTitle,
@@ -148,6 +172,7 @@ export class DrawerComponent implements OnInit {
     // Return a result when closed
     modal.afterClose.subscribe(result => {
       this.isSaving = true;
+      this.isEvent = true;
       this.eventTypeService
         .query()
         .pipe(
@@ -158,6 +183,7 @@ export class DrawerComponent implements OnInit {
         .subscribe((resBody: IEventType[]) => {
           this.eventtypes = resBody;
           this.isSaving = false;
+          this.isEvent = false;
         });
     });
   }
@@ -171,6 +197,7 @@ export class DrawerComponent implements OnInit {
     // Return a result when closed
     modal.afterClose.subscribe(result => {
       this.isSaving = true;
+      this.isLocalisation = true;
       this.localisationService
         .query()
         .pipe(
@@ -181,6 +208,7 @@ export class DrawerComponent implements OnInit {
         .subscribe((resBody: ILocalisation[]) => {
           this.localisations = resBody;
           this.isSaving = false;
+          this.isLocalisation = true;
         });
     });
   }
@@ -213,7 +241,7 @@ export class DrawerComponent implements OnInit {
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IEvent>>): void {
     result.subscribe(
       () => this.onSaveSuccess(),
-      () => this.onSaveError()
+      (e: HttpErrorResponse) => this.onSaveError(e)
     );
   }
 
@@ -223,8 +251,9 @@ export class DrawerComponent implements OnInit {
     this.drawerRef.close();
   }
 
-  protected onSaveError(): void {
+  protected onSaveError(e: HttpErrorResponse): void {
     this.isSaving = false;
+    this.alertService.error('error.http.' + e.status);
   }
 
   resetForm(e: MouseEvent): void {

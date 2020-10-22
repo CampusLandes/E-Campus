@@ -110,7 +110,9 @@
       "edit": "Edit",
       "open": "Open",
       "save": "Save",
-      "view": "View"
+      "view": "View",
+      "previous": "Previous",
+      "next": "Next"
     },
     "detail": {
       "field": "Field",

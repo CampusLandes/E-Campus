@@ -34,7 +34,8 @@ import {
   faTasks,
   faHome,
   faFire,
-  faExchangeAlt
+  faExchangeAlt,
+  faArrowAltCircleUp
 } from '@fortawesome/free-solid-svg-icons';
 
 export const fontAwesomeIcons = [
@@ -73,5 +74,7 @@ export const fontAwesomeIcons = [
   faTrashAlt,
   faAsterisk,
   faFire,
-  faExchangeAlt
+  faExchangeAlt,
+  faArrowAltCircleUp,
+  faTrashAlt
 ];

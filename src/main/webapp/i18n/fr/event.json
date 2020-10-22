@@ -17,6 +17,11 @@
       "detail": {
         "title": "Événement"
       },
+      "steps": {
+        "general": "Donnée général",
+        "participant": "Gérer les participants",
+        "overview": "Résumé"
+      },
       "title": "Titre",
       "desc": "Description",
       "completionDate": "Date de réalisation",

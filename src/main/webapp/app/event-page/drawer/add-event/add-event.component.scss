@@ -11,3 +11,18 @@
 .button-add {
   padding: 4px 0px;
 }
+
+.marginOff {
+  margin: 0px;
+}
+
+.centerResume {
+  width: 25%;
+  margin: auto;
+}
+
+@media screen and (max-width: 800px) {
+  .centerResume {
+    width: 100%;
+  }
+}

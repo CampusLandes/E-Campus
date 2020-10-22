@@ -15,6 +15,7 @@ import { DrawerComponent } from './drawer/drawer.component';
 import { NzDrawerService, NzModalService } from 'ng-zorro-antd';
 import { JhiEventManager } from 'ng-jhipster';
 import { ImageViewerComponent } from './drawer/image-viewer/image-viewer.component';
+import { TranslateService } from '@ngx-translate/core';
 
 class MyDataSource extends DataSource<Event> {
   private length = 10;
@@ -102,11 +103,13 @@ export class EventPageComponent implements OnInit {
   currentUser: IUser = new User();
   account!: Account;
   eventSubscriber?: Subscription;
+  eventTitle = '';
 
   constructor(
     private http: HttpClient,
     protected userService: UserService,
     private modalService: NzModalService,
+    private translateService: TranslateService,
     protected accountService: AccountService,
     private drawerService: NzDrawerService,
     protected eventManager: JhiEventManager,
@@ -127,15 +130,19 @@ export class EventPageComponent implements OnInit {
     this.eventSubscriber = this.eventManager.subscribe('eventListModification', () => {
       this.ds = new MyDataSource(this.http, this.eventService);
     });
+    this.translateService.get('eCampusApp.event.home.createLabel').subscribe(msg => (this.eventTitle = msg));
   }
 
   public openAddModal(): void {
     this.modalService.create({
-      nzTitle: '',
+      nzTitle: this.eventTitle,
       nzContent: AddEventComponent,
       nzWidth: '90vw',
       nzComponentParams: {
         user: this.currentUser
+      },
+      nzStyle: {
+        top: '2vh'
       },
       nzFooter: null
     });

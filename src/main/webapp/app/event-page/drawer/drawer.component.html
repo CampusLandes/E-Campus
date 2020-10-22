@@ -5,7 +5,7 @@
             <nz-descriptions-item nzTitle="{{'eCampusApp.event.completionDate' | translate}}" [nzSpan]="4">{{event.completionDate | date:'medium'}}</nz-descriptions-item>
             <nz-descriptions-item nzTitle="{{'eCampusApp.event.status' | translate}}" [nzSpan]="4">{{event.status}}</nz-descriptions-item>
             <nz-descriptions-item nzTitle="{{'eCampusApp.event.type' | translate}}" [nzSpan]="4">{{event.typeName}}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="{{'eCampusApp.event.localisation' | translate}}" [nzSpan]="4">{{event.localisationName}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="{{'eCampusApp.event.localisation' | translate}}" [nzSpan]="4">{{getLocalisationName()}}</nz-descriptions-item>
             <nz-descriptions-item nzTitle="{{'eCampusApp.event.responsible' | translate}}" [nzSpan]="4">{{responsible.firstName}} {{responsible.lastName}}</nz-descriptions-item>
             <nz-descriptions-item nzTitle="{{'eCampusApp.event.image' | translate}}" [nzSpan]="4"></nz-descriptions-item>
         </nz-descriptions>
@@ -59,7 +59,7 @@
                 <nz-form-item>
                     <nz-form-label [nzSpan]="7" nzRequired><span jhiTranslate="eCampusApp.event.type">Type</span></nz-form-label>
                     <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="userErrorTpl">
-                        <nz-select formControlName="type">
+                        <nz-select formControlName="type" [nzLoading]="isEvent">
                             <nz-option *ngFor="let eventTypeOption of eventtypes; trackBy: trackById" [nzValue]="eventTypeOption.id" [nzLabel]="eventTypeOption.name"></nz-option>
                         </nz-select>
                         <ng-template #userErrorTpl let-control>
@@ -73,10 +73,10 @@
                     </div>
                 </nz-form-item>
                 <nz-form-item>
-                    <nz-form-label [nzSpan]="7" nzRequired><span jhiTranslate="eCampusApp.event.type">Type</span></nz-form-label>
+                    <nz-form-label [nzSpan]="7" nzRequired><span jhiTranslate="eCampusApp.event.localisation">Type</span></nz-form-label>
                     <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="userErrorTpl">
-                        <nz-select formControlName="localisation">
-                            <nz-option *ngFor="let localisationOption of localisations; trackBy: trackById" [nzValue]="localisationOption.id" [nzLabel]="localisationOption.name"></nz-option>
+                        <nz-select formControlName="localisation" [nzLoading]="isLocalisation">
+                            <nz-option *ngFor="let localisationOption of localisations; trackBy: trackById" [nzValue]="localisationOption.id" nzLabel="{{localisationOption.name}} - {{localisationOption.localisation}}"></nz-option>
                         </nz-select>
                         <ng-template #userErrorTpl let-control>
                             <ng-container *ngIf="control.hasError('required')">
@@ -89,7 +89,7 @@
                     </div>
                 </nz-form-item>
                 <nz-form-item>
-                    <nz-form-label [nzSpan]="7" nzRequired><span jhiTranslate="eCampusApp.event.image">image</span></nz-form-label>
+                    <nz-form-label [nzSpan]="7"><span jhiTranslate="eCampusApp.event.image">image</span></nz-form-label>
                     <nz-form-control [nzSpan]="12">
                         <button nz-button nzType="primary" (click)="changeImage()"><fa-icon [icon]="'exchange-alt'"></fa-icon>  <span jhiTranslate="eCampusApp.event.changeImage">Changer l'image</span></button>
                     </nz-form-control>

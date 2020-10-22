@@ -17,6 +17,11 @@
       "detail": {
         "title": "Event"
       },
+      "steps": {
+        "general": "General Data",
+        "participant": "Participant management",
+        "overview": "Overview"
+      },
       "title": "Title",
       "desc": "Description",
       "completionDate": "Completion Date",

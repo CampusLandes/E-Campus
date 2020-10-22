@@ -1,90 +1,122 @@
 <nz-spin [nzSpinning]="isSaving">
-    <form nz-form [formGroup]="validateForm">
-        <nz-form-item>
-            <nz-form-label [nzSpan]="7" nzRequired><span jhiTranslate="eCampusApp.event.title">Title</span></nz-form-label>
-            <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="userErrorTpl">
-                <input nz-input formControlName="title" placeholder="" />
-                <ng-template #userErrorTpl let-control>
-                    <ng-container *ngIf="control.hasError('required')">
-                        <span jhiTranslate="entity.validation.required">Ce champ est obligatoire !</span>
-                    </ng-container>
-                </ng-template>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label [nzSpan]="7"><span jhiTranslate="eCampusApp.event.desc">Description</span></nz-form-label>
-            <nz-form-control [nzSpan]="12">
-                <input nz-input formControlName="description" placeholder="" />
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label [nzSpan]="7"><span jhiTranslate="eCampusApp.event.completionDate">Date</span></nz-form-label>
-            <nz-form-control [nzSpan]="12">
-                <nz-date-picker formControlName="date"></nz-date-picker>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label [nzSpan]="7" nzRequired><span jhiTranslate="eCampusApp.event.status">Status</span></nz-form-label>
-            <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="userErrorTpl">
-                <nz-select formControlName="status">
-                    <nz-option nzValue="PRIVATE" nzLabel="{{'eCampusApp.EventStatus.PRIVATE' | translate}}"></nz-option>
-                    <nz-option nzValue="PUBLIC" nzLabel="{{'eCampusApp.EventStatus.PUBLIC' | translate}}"></nz-option>
-                </nz-select>
-                <ng-template #userErrorTpl let-control>
-                    <ng-container *ngIf="control.hasError('required')">
-                        <span jhiTranslate="entity.validation.required">Ce champ est obligatoire !</span>
-                    </ng-container>
-                </ng-template>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label [nzSpan]="7" nzRequired><span jhiTranslate="eCampusApp.event.type">Type</span></nz-form-label>
-            <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="userErrorTpl">
-                <nz-select formControlName="type">
-                    <nz-option *ngFor="let eventTypeOption of eventtypes; trackBy: trackById" [nzValue]="eventTypeOption.id" [nzLabel]="eventTypeOption.name"></nz-option>
-                </nz-select>
-                <ng-template #userErrorTpl let-control>
-                    <ng-container *ngIf="control.hasError('required')">
-                        <span jhiTranslate="entity.validation.required">Ce champ est obligatoire !</span>
-                    </ng-container>
-                </ng-template>
-            </nz-form-control>
-            <div class="button-add" nzSpan="5">
-                <button nz-button nzType="primary" (click)="addType()"><fa-icon [icon]="'plus'"></fa-icon></button>
-            </div>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label [nzSpan]="7" nzRequired><span jhiTranslate="eCampusApp.event.type">Type</span></nz-form-label>
-            <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="userErrorTpl">
-                <nz-select formControlName="localisation">
-                    <nz-option *ngFor="let localisationOption of localisations; trackBy: trackById" [nzValue]="localisationOption.id" [nzLabel]="localisationOption.name"></nz-option>
-                </nz-select>
-                <ng-template #userErrorTpl let-control>
-                    <ng-container *ngIf="control.hasError('required')">
-                        <span jhiTranslate="entity.validation.required">Ce champ est obligatoire !</span>
-                    </ng-container>
-                </ng-template>
-            </nz-form-control>
-            <div class="button-add" nzSpan="5">
-                <button nz-button nzType="primary" (click)="addLocalisation()"><fa-icon [icon]="'plus'"></fa-icon></button>
-            </div>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label [nzSpan]="7" nzRequired><span jhiTranslate="eCampusApp.event.image">image</span></nz-form-label>
-            <nz-form-control [nzSpan]="12">
-                <button nz-button nzType="primary" (click)="changeImage()"><fa-icon [icon]="'exchange-alt'"></fa-icon>  <span jhiTranslate="eCampusApp.event.changeImage">Changer l'image</span></button>
-            </nz-form-control>
+    <nz-steps [nzCurrent]="current">
+        <nz-step nzTitle="{{'eCampusApp.event.steps.general' | translate}}"></nz-step>
+        <nz-step nzTitle="{{'eCampusApp.event.steps.participant' | translate}}" *ngIf="isPrivate()"></nz-step>
+        <nz-step nzTitle="{{'eCampusApp.event.steps.overview' | translate}}"></nz-step>
+    </nz-steps>
+    <hr>
+    <br>
+    <div class="steps-content">
+        <form nz-form [formGroup]="validateForm" *ngIf="current==0">
+            <nz-form-item>
+                <nz-form-label [nzSpan]="7" nzRequired><span jhiTranslate="eCampusApp.event.title">Title</span></nz-form-label>
+                <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="userErrorTpl">
+                    <input nz-input formControlName="title" placeholder="" />
+                    <ng-template #userErrorTpl let-control>
+                        <ng-container *ngIf="control.hasError('required')">
+                            <span jhiTranslate="entity.validation.required">Ce champ est obligatoire !</span>
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="7"><span jhiTranslate="eCampusApp.event.desc">Description</span></nz-form-label>
+                <nz-form-control [nzSpan]="12">
+                    <input nz-input formControlName="description" placeholder="" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="7"><span jhiTranslate="eCampusApp.event.completionDate">Date</span></nz-form-label>
+                <nz-form-control [nzSpan]="12">
+                    <nz-date-picker formControlName="date"></nz-date-picker>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="7" nzRequired><span jhiTranslate="eCampusApp.event.status">Status</span></nz-form-label>
+                <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="userErrorTpl">
+                    <nz-select formControlName="status">
+                        <nz-option nzValue="PRIVATE" nzLabel="{{'eCampusApp.EventStatus.PRIVATE' | translate}}"></nz-option>
+                        <nz-option nzValue="PUBLIC" nzLabel="{{'eCampusApp.EventStatus.PUBLIC' | translate}}"></nz-option>
+                    </nz-select>
+                    <ng-template #userErrorTpl let-control>
+                        <ng-container *ngIf="control.hasError('required')">
+                            <span jhiTranslate="entity.validation.required">Ce champ est obligatoire !</span>
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="7" nzRequired><span jhiTranslate="eCampusApp.event.type">Type</span></nz-form-label>
+                <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="userErrorTpl">
+                    <nz-select formControlName="type" [nzLoading]="isEvent">
+                        <nz-option *ngFor="let eventTypeOption of eventtypes; trackBy: trackById" [nzValue]="eventTypeOption.id" [nzLabel]="eventTypeOption.name"></nz-option>
+                    </nz-select>
+                    <ng-template #userErrorTpl let-control>
+                        <ng-container *ngIf="control.hasError('required')">
+                            <span jhiTranslate="entity.validation.required">Ce champ est obligatoire !</span>
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+                <div class="button-add" nzSpan="5">
+                    <button nz-button nzType="primary" (click)="addType()"><fa-icon [icon]="'plus'"></fa-icon></button>
+                </div>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="7" nzRequired><span jhiTranslate="eCampusApp.event.localisation">Type</span></nz-form-label>
+                <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="userErrorTpl">
+                    <nz-select formControlName="localisation" [nzLoading]="isLocalisation">
+                        <nz-option *ngFor="let localisationOption of localisations; trackBy: trackById" [nzValue]="localisationOption.id" nzLabel="{{localisationOption.name}} - {{localisationOption.localisation}}"></nz-option>
+                    </nz-select>
+                    <ng-template #userErrorTpl let-control>
+                        <ng-container *ngIf="control.hasError('required')">
+                            <span jhiTranslate="entity.validation.required">Ce champ est obligatoire !</span>
+                        </ng-container>
+                    </ng-template>
+                </nz-form-control>
+                <div class="button-add" nzSpan="5">
+                    <button nz-button nzType="primary" (click)="addLocalisation()"><fa-icon [icon]="'plus'"></fa-icon></button>
+                </div>
+            </nz-form-item>
+            <nz-form-item class="marginOff">
+                <nz-form-label [nzSpan]="7"><span jhiTranslate="eCampusApp.event.image">image</span></nz-form-label>
+                <nz-form-control [nzSpan]="12">
+                    <button nz-button nzType="primary" (click)="changeImage()"><fa-icon [icon]="'exchange-alt'"></fa-icon>  <span jhiTranslate="eCampusApp.event.changeImage">Changer l'image</span></button>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <div nz-col nzSpan="12" nzOffset="7">
+                    <p>
+                        <img class="imageEvent" alt="logo" src="{{getImageUrl(user.login,getUrl())}}" />
+                    </p>
+                </div>
+            </nz-form-item>
+        </form>
+        <div class="centerResume" *ngIf="(current === 2 && isPrivate()) || (current === 1 && !isPrivate())">
+            <nz-descriptions [nzColumn]="4" nzTitle="{{event.title | uppercase}}">
+                <nz-descriptions-item nzTitle="{{'eCampusApp.event.desc' | translate}}" [nzSpan]="4" word-break=break-word>{{event.desc}}</nz-descriptions-item>
+                <nz-descriptions-item nzTitle="{{'eCampusApp.event.completionDate' | translate}}" [nzSpan]="4">{{event.completionDate | date:'medium'}}</nz-descriptions-item>
+                <nz-descriptions-item nzTitle="{{'eCampusApp.event.status' | translate}}" [nzSpan]="4">{{event.status}}</nz-descriptions-item>
+                <nz-descriptions-item nzTitle="{{'eCampusApp.event.type' | translate}}" [nzSpan]="4">{{event.typeName}}</nz-descriptions-item>
+                <nz-descriptions-item nzTitle="{{'eCampusApp.event.localisation' | translate}}" [nzSpan]="4">{{getLocalisationName()}}</nz-descriptions-item>
+                <nz-descriptions-item nzTitle="{{'eCampusApp.event.responsible' | translate}}" [nzSpan]="4">{{user.firstName}} {{user.lastName}}</nz-descriptions-item>
+                <nz-descriptions-item nzTitle="{{'eCampusApp.event.image' | translate}}" [nzSpan]="4"></nz-descriptions-item>
+            </nz-descriptions>
             <p>
-                <img class="imageEvent" alt="logo" src="{{getImageUrl(user.login,getUrl())}}" />
+                <img class="imageEvent" alt="logo" src="{{getImageUrl(event.responsibleLogin,event.imageUrl)}}" />
             </p>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-control [nzOffset]="6" [nzSpan]="12">
-                <nz-button-group>
-                    <button nz-button nzType="primary" [disabled]="!validateForm.valid || isSaving" (click)="submitForm()"><span jhiTranslate="entity.action.save">Submit</span>
-                    </button><button nz-button nzType="default" (click)="resetForm($event)"><span jhiTranslate="entity.action.cancel">Reset</span></button>
-                </nz-button-group>
-            </nz-form-control>
-        </nz-form-item>
-    </form>
+        </div>
+    </div>
+    <br>
+    <hr>
+    <div class="steps-action">
+        <nz-button-group>
+            <button nz-button nzType="default" (click)="pre()" *ngIf="current > 0">
+                <span jhiTranslate="entity.action.previous">Previous</span>
+            </button><button nz-button nzType="default" (click)="next()" *ngIf="(current < 2 && isPrivate()) || (current < 1 && !isPrivate())" [disabled]="!validateForm.valid || isSaving">
+                <span jhiTranslate="entity.action.next">Next</span>
+            </button><button nz-button nzType="primary" (click)="submitForm()" *ngIf="(current === 2 && isPrivate()) || (current === 1 && !isPrivate())">
+                <span jhiTranslate="entity.action.save">Submit</span>
+            </button>
+        </nz-button-group>
+    </div>
 </nz-spin>

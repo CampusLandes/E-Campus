@@ -1,7 +1,7 @@
-import { ILocalisation } from './../../../shared/model/localisation.model';
+import { ILocalisation, Localisation } from './../../../shared/model/localisation.model';
 import { Event, IEvent } from 'app/shared/model/event.model';
 import { User } from './../../../core/user/user.model';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IEventType } from 'app/shared/model/event-type.model';
 import { SERVER_API_URL } from 'app/app.constants';
@@ -11,11 +11,11 @@ import { UserService } from 'app/core/user/user.service';
 import { EventTypeService } from 'app/entities/event-type/event-type.service';
 import { EventService } from 'app/entities/event/event.service';
 import { LocalisationService } from 'app/entities/localisation/localisation.service';
-import { JhiEventManager } from 'ng-jhipster';
-import { HttpResponse } from '@angular/common/http';
+import { JhiAlertService, JhiEventManager } from 'ng-jhipster';
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { ImportImageComponent } from '../import-image/import-image.component';
-import { DATE_TIME_FORMAT, DATE_FORMAT } from 'app/shared/constants/input.constants';
+import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { LocalisationAddComponent } from '../localisation-add/localisation-add.component';
@@ -44,6 +44,12 @@ export class AddEventComponent {
   private imageTitle = '';
 
   isSaving = false;
+  isEvent = true;
+  isLocalisation = true;
+
+  current = 0;
+
+  localisation: ILocalisation = new Localisation();
 
   constructor(
     protected eventManager: JhiEventManager,
@@ -54,7 +60,8 @@ export class AddEventComponent {
     protected userService: UserService,
     protected localisationService: LocalisationService,
     protected eventTypeService: EventTypeService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private alertService: JhiAlertService
   ) {
     this.event.responsibleId = this.user.id;
     this.event.responsibleLogin = this.user.login;
@@ -64,7 +71,7 @@ export class AddEventComponent {
       date: [''],
       status: ['', [Validators.required]],
       type: ['', [Validators.required]],
-      image: ['', [Validators.required]],
+      image: [''],
       localisation: ['', [Validators.required]]
     });
     this.translateService.get('eCampusApp.localisation.home.createLabel').subscribe(msg => (this.localisationTitle = msg));
@@ -77,7 +84,10 @@ export class AddEventComponent {
           return res.body ? res.body : [];
         })
       )
-      .subscribe((resBody: ILocalisation[]) => (this.localisations = resBody));
+      .subscribe((resBody: ILocalisation[]) => {
+        this.localisations = resBody;
+        this.isLocalisation = false;
+      });
     this.eventTypeService
       .query()
       .pipe(
@@ -85,7 +95,10 @@ export class AddEventComponent {
           return res.body ? res.body : [];
         })
       )
-      .subscribe((resBody: IEventType[]) => (this.eventtypes = resBody));
+      .subscribe((resBody: IEventType[]) => {
+        this.eventtypes = resBody;
+        this.isEvent = false;
+      });
   }
 
   public changeImage(): void {
@@ -106,6 +119,10 @@ export class AddEventComponent {
     });
   }
 
+  isPrivate(): boolean {
+    return this.validateForm.get(['status'])!.value === 'PRIVATE';
+  }
+
   addType(): void {
     const modal = this.modalService.create({
       nzTitle: this.eventTypeTitle,
@@ -115,6 +132,7 @@ export class AddEventComponent {
     // Return a result when closed
     modal.afterClose.subscribe(result => {
       this.isSaving = true;
+      this.isEvent = true;
       this.eventTypeService
         .query()
         .pipe(
@@ -125,8 +143,24 @@ export class AddEventComponent {
         .subscribe((resBody: IEventType[]) => {
           this.eventtypes = resBody;
           this.isSaving = false;
+          this.isEvent = false;
         });
     });
+  }
+
+  pre(): void {
+    this.current -= 1;
+  }
+
+  next(): void {
+    if (this.current === 0) {
+      this.updateEvent();
+      if (this.event.localisationId) {
+        const id: number = this.event.localisationId;
+        this.localisation = this.localisations.find(i => i.id === this.event.localisationId) as ILocalisation;
+      }
+    }
+    this.current += 1;
   }
 
   addLocalisation(): void {
@@ -138,6 +172,7 @@ export class AddEventComponent {
     // Return a result when closed
     modal.afterClose.subscribe(result => {
       this.isSaving = true;
+      this.isLocalisation = true;
       this.localisationService
         .query()
         .pipe(
@@ -148,6 +183,7 @@ export class AddEventComponent {
         .subscribe((resBody: ILocalisation[]) => {
           this.localisations = resBody;
           this.isSaving = false;
+          this.isLocalisation = false;
         });
     });
   }
@@ -155,6 +191,8 @@ export class AddEventComponent {
   submitForm(): void {
     this.isSaving = true;
     this.updateEvent();
+    // eslint-disable-next-line no-console
+    console.log(this.event);
     this.subscribeToSaveResponse(this.eventService.create(this.event));
   }
 
@@ -171,12 +209,14 @@ export class AddEventComponent {
     this.event.typeName = (this.eventtypes.find(i => i.id === this.event.typeId) as IEventType).name;
     this.event.localisationId = this.validateForm.get(['localisation'])!.value;
     this.event.localisationName = (this.localisations.find(i => i.id === this.event.localisationId) as ILocalisation).name;
+    this.event.responsibleId = this.user.id;
+    this.event.responsibleLogin = this.user.login;
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IEvent>>): void {
     result.subscribe(
       () => this.onSaveSuccess(),
-      () => this.onSaveError()
+      (e: HttpErrorResponse) => this.onSaveError(e)
     );
   }
 
@@ -186,8 +226,17 @@ export class AddEventComponent {
     this.modal.destroy();
   }
 
-  protected onSaveError(): void {
+  protected onSaveError(e: HttpErrorResponse): void {
     this.isSaving = false;
+    this.alertService.error('error.http.' + e.status);
+  }
+
+  getLocalisationName(): string {
+    let text = this.event.localisationName ? this.event.localisationName : '';
+    if (this.localisation) {
+      text = this.localisation.name + ' - ' + this.localisation.localisation;
+    }
+    return text;
   }
 
   resetForm(e: MouseEvent): void {
