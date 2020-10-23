@@ -1,8 +1,9 @@
-import { HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EventTypeService } from 'app/entities/event-type/event-type.service';
 import { IEventType, EventType } from 'app/shared/model/event-type.model';
+import { JhiAlertService } from 'ng-jhipster';
 import { NzModalRef } from 'ng-zorro-antd';
 import { Observable } from 'rxjs';
 
@@ -15,7 +16,12 @@ export class TypeAddComponent {
   isSaving: Boolean = false;
   validateForm: FormGroup;
 
-  constructor(private fb: FormBuilder, protected eventTypeService: EventTypeService, private modal: NzModalRef) {
+  constructor(
+    private fb: FormBuilder,
+    protected eventTypeService: EventTypeService,
+    private modal: NzModalRef,
+    private alertService: JhiAlertService
+  ) {
     this.validateForm = this.fb.group({
       name: ['', [Validators.required]]
     });
@@ -47,7 +53,7 @@ export class TypeAddComponent {
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IEventType>>): void {
     result.subscribe(
       () => this.onSaveSuccess(),
-      () => this.onSaveError()
+      (e: HttpErrorResponse) => this.onSaveError(e)
     );
   }
 
@@ -56,7 +62,8 @@ export class TypeAddComponent {
     this.modal.destroy();
   }
 
-  protected onSaveError(): void {
+  protected onSaveError(e: HttpErrorResponse): void {
     this.isSaving = false;
+    this.alertService.error('error.http.' + e.status);
   }
 }

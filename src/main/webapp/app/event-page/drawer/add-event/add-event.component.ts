@@ -5,7 +5,7 @@ import { Component, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IEventType } from 'app/shared/model/event-type.model';
 import { SERVER_API_URL } from 'app/app.constants';
-import { NzModalRef, NzModalService } from 'ng-zorro-antd';
+import { NzModalRef, NzModalService, TransferItem } from 'ng-zorro-antd';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from 'app/core/user/user.service';
 import { EventTypeService } from 'app/entities/event-type/event-type.service';
@@ -30,6 +30,8 @@ export class AddEventComponent {
   @Input() user: User = new User();
 
   public resourceUrl = SERVER_API_URL + 'api/events';
+
+  list: TransferItem[] = [];
 
   event: Event = new Event();
 
@@ -99,6 +101,14 @@ export class AddEventComponent {
         this.eventtypes = resBody;
         this.isEvent = false;
       });
+
+    /* this.list.push({
+        key: i.toString(),
+        title: `content${i + 1}`,
+        description: `description of content${i + 1}`,
+        direction: Math.random() * 2 > 1 ? 'right' : undefined
+      }); */
+    this.userService.findAllActive();
   }
 
   public changeImage(): void {
@@ -140,11 +150,14 @@ export class AddEventComponent {
             return res.body ? res.body : [];
           })
         )
-        .subscribe((resBody: IEventType[]) => {
-          this.eventtypes = resBody;
-          this.isSaving = false;
-          this.isEvent = false;
-        });
+        .subscribe(
+          (resBody: IEventType[]) => {
+            this.eventtypes = resBody;
+            this.isSaving = false;
+            this.isEvent = false;
+          },
+          (e: HttpErrorResponse) => this.onSaveError(e)
+        );
     });
   }
 
@@ -161,6 +174,23 @@ export class AddEventComponent {
       }
     }
     this.current += 1;
+  }
+
+  // tslint:disable-next-line:no-any
+  filterOption(inputValue: string, item: any): boolean {
+    return item.description.indexOf(inputValue) > -1;
+  }
+
+  search(ret: {}): void {
+    // console.log('nzSearchChange', ret);
+  }
+
+  select(ret: {}): void {
+    // console.log('nzSelectChange', ret);
+  }
+
+  change(ret: {}): void {
+    // console.log('nzChange', ret);
   }
 
   addLocalisation(): void {
@@ -180,11 +210,14 @@ export class AddEventComponent {
             return res.body ? res.body : [];
           })
         )
-        .subscribe((resBody: ILocalisation[]) => {
-          this.localisations = resBody;
-          this.isSaving = false;
-          this.isLocalisation = false;
-        });
+        .subscribe(
+          (resBody: ILocalisation[]) => {
+            this.localisations = resBody;
+            this.isSaving = false;
+            this.isLocalisation = false;
+          },
+          (e: HttpErrorResponse) => this.onSaveError(e)
+        );
     });
   }
 

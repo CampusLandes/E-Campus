@@ -91,6 +91,10 @@
                 </div>
             </nz-form-item>
         </form>
+        <div *ngIf="current === 1 && isPrivate()">
+            <nz-transfer [nzDataSource]="list" nzShowSearch [nzFilterOption]="filterOption" (nzSearchChange)="search($event)" (nzSelectChange)="select($event)" (nzChange)="change($event)">
+            </nz-transfer>
+        </div>
         <div class="centerResume" *ngIf="(current === 2 && isPrivate()) || (current === 1 && !isPrivate())">
             <nz-descriptions [nzColumn]="4" nzTitle="{{event.title | uppercase}}">
                 <nz-descriptions-item nzTitle="{{'eCampusApp.event.desc' | translate}}" [nzSpan]="4" word-break=break-word>{{event.desc}}</nz-descriptions-item>

@@ -37,5 +37,6 @@
     <include file="add_audit.xml" relativeToChangelogFile="true"/>
     <include file="add_unique_constraint.xml" relativeToChangelogFile="true"/>
     <include file="add_url_field.xml" relativeToChangelogFile="true"/>
+    <include file="change_unique_constraint.xml" relativeToChangelogFile="true"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

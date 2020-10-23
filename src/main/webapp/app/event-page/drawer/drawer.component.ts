@@ -208,7 +208,7 @@ export class DrawerComponent implements OnInit {
         .subscribe((resBody: ILocalisation[]) => {
           this.localisations = resBody;
           this.isSaving = false;
-          this.isLocalisation = true;
+          this.isLocalisation = false;
         });
     });
   }

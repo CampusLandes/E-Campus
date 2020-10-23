@@ -1,8 +1,9 @@
-import { HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LocalisationService } from 'app/entities/localisation/localisation.service';
 import { ILocalisation, Localisation } from 'app/shared/model/localisation.model';
+import { JhiAlertService } from 'ng-jhipster';
 import { NzModalRef } from 'ng-zorro-antd';
 import { Observable } from 'rxjs';
 
@@ -15,7 +16,12 @@ export class LocalisationAddComponent {
   isSaving: Boolean = false;
   validateForm: FormGroup;
 
-  constructor(private fb: FormBuilder, protected localisationService: LocalisationService, private modal: NzModalRef) {
+  constructor(
+    private fb: FormBuilder,
+    protected localisationService: LocalisationService,
+    private modal: NzModalRef,
+    private alertService: JhiAlertService
+  ) {
     this.validateForm = this.fb.group({
       name: ['', [Validators.required]],
       localisation: [null, [Validators.required]],
@@ -51,7 +57,7 @@ export class LocalisationAddComponent {
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ILocalisation>>): void {
     result.subscribe(
       () => this.onSaveSuccess(),
-      () => this.onSaveError()
+      (e: HttpErrorResponse) => this.onSaveError(e)
     );
   }
 
@@ -60,7 +66,8 @@ export class LocalisationAddComponent {
     this.modal.destroy();
   }
 
-  protected onSaveError(): void {
+  protected onSaveError(e: HttpErrorResponse): void {
     this.isSaving = false;
+    this.alertService.error('error.http.' + e.status);
   }
 }
